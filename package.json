@@ -1,0 +1,26 @@
+{
+  "name": "web-project",
+  "version": "1.0.0",
+  "description": "Draw online with your friends.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EShrestha/Web-Project.git"
+  },
+  "author": "WBSP Team 1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EShrestha/Web-Project/issues"
+  },
+  "homepage": "https://github.com/EShrestha/Web-Project#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.14",
+    "pub": "^0.2.0",
+    "socket.io": "^3.0.1"
+  }
+}
