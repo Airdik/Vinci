@@ -1,0 +1,54 @@
+extends layout
+
+block accOpt
+    block accOpt
+    li
+        a(href='/login') Have An Account?
+
+
+block A
+    div(id='bodyDiv' class='body')
+        div(id='formTopTitle')
+            h(id='topTitle') Please Complete The Form Below
+        
+        div(id='contentDiv' class='contentHolder')
+
+            form(id='form' method='POST' action='/create' autocomplete='off' onsubmit= 'return validate(event)')
+                div(class='inputDiv')
+                    h5(class='inputHeadding') First Name
+                    input(id='fname' type='text' placeholder='Jesus' name='fname' autocomplete='off')
+                    p(id='fnameError' class='error') &nbsp;
+
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Last Name
+                    input(id='lname' type='text' placeholder='Christ' name='lname' autocomplete='off')
+                    p(id='lnameError' class='error') &nbsp;
+
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Username
+                    input(id='username' type='text' placeholder='TheRealJesus' name='username' autocomplete='off')
+                    p(id='usernameError' class='error') &nbsp;
+                
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Email
+                    input(id='email' type='text' autocomplete='nope' name='email' placeholder='JesusTheMessiah@cross.com' )
+                    p(id='emailError' class='error') &nbsp;
+                    
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Password
+                    input(id='password' type="password" placeholder="- - - - - - - -" autocomplete="off")
+                    p(id='passwordError' class='error') &nbsp;
+
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Verify Password
+                    input(id='vpassword' type="password" placeholder="- - - - - - - -" autocomplete="off")
+                    p(id='vpasswordError' class='error') &nbsp;
+
+                div
+                    p(id='submitError' class='error') &nbsp;
+                    input(id='submitBtn' type='submit' value='REGISTER')
+
+                a(id='loginLink' href='/login') Wait I Have An Account!
+
+
+

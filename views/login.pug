@@ -1,0 +1,23 @@
+extends layout
+
+block accOpt
+    li
+        a(href='/create') Sign Up?
+
+block A
+
+    div(class='loginbox')
+        form(method='POST' action='/login' autocomplete='off')
+            h1(id='loginTitle') Sign In Here
+            br
+            p(id='usrTitle') Username
+            input(type='text' name='username' placeholder='Enter Username')
+            p(id='pwdTitle') Password
+            input(type='password' name='password' placeholder='Enter Password')
+            br
+            input(id='submitBtn' type='submit' name='loginBtn' value='Login')
+            br
+            br
+            br
+            a(id='createLink' href='/create') Create an account?
+    

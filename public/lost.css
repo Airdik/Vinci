@@ -1,0 +1,25 @@
+body{
+    background-image: url('images/lost-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.text{
+    margin: auto;
+    padding: 0;
+    padding-top: 10%;
+    width: 100%;
+    text-align: center;
+    font-size: 32px;
+}
+
+#home{
+    color: rgb(226, 62, 62);
+}
+
+#home:hover{
+    cursor: pointer;
+    color: rgb(243, 191, 50);
+    transition: .5s;
+}

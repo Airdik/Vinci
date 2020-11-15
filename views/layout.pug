@@ -1,0 +1,33 @@
+doctype
+html
+
+    head
+        <meta name="viewport" content="width=device-width">
+        title=title
+        link(rel='icon' href= icon_href)
+        link(href="https://fonts.googleapis.com/css2?family=Kufam:ital,wght@1,900&display=swap" rel="stylesheet")
+        link(href='/style.css' rel='stylesheet')
+        link(href=css_href rel='stylesheet')
+
+    header
+        a(href='/')
+            h1 
+                span Vinci
+                    span(id='lastVisit').
+                        &nbsp; #{lastVisitedTime}
+        nav
+            ul
+                li
+                    a(href='/') Home
+                li
+                    a(href='/about') About
+                li
+                    a(href='/contact') Contact
+                block accOpt
+                
+    body
+        block A
+        script(src=script_src)
+
+                    
+
