@@ -104,9 +104,37 @@ header nav ul li ul li{
     font-size: 14px;
 }
 
+.contentHolder{
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+}
+
+#bodyDiv{
+    margin: auto;
+    margin-top: 6%;
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(3px);
+    border: 4px solid rgba(255, 255, 255, 4);
+    border-radius: 20px;
+    
+    width: 50%;
+    padding-bottom: 1%;
+    
+    text-align:center;
+    
+}
 
 
 
+
+#topTitle{
+    margin-top:40px;
+    font-size: 30px;
+
+}
 
 
 
@@ -142,4 +170,18 @@ a:hover{
 img{
     width: 100%;
     margin-top: -16px;
+}
+
+#playLink{
+    
+    color: rgb(255, 196, 0);
+    font-size: 32px;
+    
+}
+
+
+#playLink:hover, #submitBtn:hover{
+    cursor: pointer;
+    color: chocolate;
+    transition: .5s;
 }

@@ -1,0 +1,38 @@
+extends layout
+
+block A
+    div(id='bodyDiv' class='body')
+        div(id='topTitle')
+            h(id='topTitle') Create, join, or find a room below!
+        
+        div(id='contentDiv' class='contentHolder')
+
+            div(class='flex-container')
+                div(class='title flex-child')
+                    h5(class='inputHeading') Create Room
+                    input(id='createCode' placeholder="Room Code" autocomplete="off" )
+                    p(id='createCodeError' class='error') &nbsp;
+
+                div(class='title flex-child')
+                    h5(class='inputHeading') &nbsp;
+                    h2(id='create' class='action') Create!
+
+            div(class='flex-container')
+                div(class='title flex-child')
+                    h5(class='inputHeading') Join Room
+                    input(id='joinCode' placeholder="Room Code" autocomplete="off" )
+                    p(id='joinCodeError' class='error') &nbsp;
+
+                div(class='title flex-child')
+                    h5(class='inputHeading') &nbsp;
+                    h2(id='join' class='action') Join!
+            
+
+            div(class='title')
+                h5(id='findRoom' class='inputHeading') Find Random room
+
+    script(src="/socket.io/socket.io.js")
+    script(src="/play.js") 
+                
+
+    

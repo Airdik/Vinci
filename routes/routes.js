@@ -49,13 +49,15 @@ exports.contact = (req, res) => {
 exports.verifyLogin = (req, res) => {
 
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
+    // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
     if (req.body.username == 'user' && req.body.password == 'pass') {
         // once user and pass are verified then we create a session
         req.session.user = {
             isAuthenticated: true,
             username: req.body.username
         }
-        res.redirect('/private');
+        //Once logged in redirect to this page
+        res.redirect('/play');
     } else {
         // if could not verify then do this
         res.redirect('/login');
@@ -86,7 +88,11 @@ exports.private = (req, res) => {
 }
 
 exports.play = (req, res) => {
-    res.send('This is where the user can join lobby')
+    res.render('play', {
+        title: 'Play',
+        icon_href: '/images/play.png',
+        css_href: '/play.css'
+    })
 }
 
 

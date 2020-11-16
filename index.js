@@ -8,6 +8,10 @@ const routes = require('./routes/routes')
 const cookieParser = require('cookie-parser');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
+
 
 // Things the app is using
 app.set('view engine', 'pug');
@@ -22,9 +26,10 @@ const urlencodedParser = bodyParser.urlencoded({
 // If user is authenticated it will proceeds to the requested path else redirects to home page
 const checkAuth = (req, res, next) => {
     if (req.session.user && req.session.user.isAuthenticated) {
+
         next();
     } else {
-        res.redirect('/')
+        res.redirect('/login')
     }
 }
 
@@ -55,5 +60,35 @@ app.get('/*', routes.lost);
 
 
 
+
+
+
+
+
+/////////////////// SOCKET CODE HERE //////////////////////////////////////////
+io.on('connection', socket => {
+    socket.emit('first-connect', `Connected to socket! ID:${socket.id}`)
+    console.log(`User connected, ID: ${socket.id}`)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Servers listening port
-app.listen(6969);
+server.listen(6969);
+
+
+
+

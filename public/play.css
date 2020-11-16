@@ -1,0 +1,98 @@
+body{
+    background-image: url('images/play-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#bodyDiv{
+    margin: auto;
+
+    margin: auto;
+    margin-top: 4%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    
+    width: 50%;
+    padding-bottom: 1%;
+    
+    text-align:center;
+    
+}
+
+.inputDiv{
+    width: 50%;
+    float: left;
+}
+
+#contentDiv{
+    width: 60%;
+}
+
+input{
+    width: 90%;
+    padding:3%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+}
+
+.inputHeading{
+    margin-bottom: 2px;
+    font-size: 18px;
+}
+.title{
+
+}
+
+#topTitle{
+    margin-top:40px;
+    font-size: 30px;
+
+}
+#createCode{
+    border-radius: 20px;
+    outline: none;
+    padding: 5px;
+}
+
+#createCodeError{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+#findRoom{
+    margin-top: 3px;
+}
+#findRoom:hover{
+    color: #F0c330;
+    cursor: pointer;
+}
+
+.flex-container {
+    display: flex;
+    margin-left: 25%;
+}
+
+.flex-child {
+    flex: 1;
+    margin: 0;
+
+    
+}  
+
+.action{
+    margin-top: 0px;
+    
+    margin-left:10px;
+    float: left;
+}
+
+.action:hover{
+    color: #F0c330;
+    cursor: pointer;
+}
