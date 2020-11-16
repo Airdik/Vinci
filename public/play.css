@@ -9,7 +9,7 @@ body{
     margin: auto;
 
     margin: auto;
-    margin-top: 4%;
+    margin-top: 10%;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     border: 4px solid rgba(255, 255, 255, 0.3);
@@ -44,9 +44,6 @@ input{
 .inputHeading{
     margin-bottom: 2px;
     font-size: 18px;
-}
-.title{
-
 }
 
 #topTitle{

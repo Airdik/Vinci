@@ -62,7 +62,7 @@ body{
     width: 25%;
     text-align: center;
     margin: auto;
-    color: rgb(255, 255, 255);
+    color: #f8990a;
     font-size: 19px;
 }
 
@@ -91,7 +91,7 @@ input:hover{
     font-weight: 900;
     text-transform: uppercase;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+    color: #000000;
 }
 .error{
     margin-top: 5px;

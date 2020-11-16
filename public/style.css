@@ -34,7 +34,7 @@ h1{
 }
 
 span{
-    color: rgb(255, 201, 119);
+    color: #ffc977;
 }
 
 ul{
@@ -113,7 +113,7 @@ header nav ul li ul li{
 
 #bodyDiv{
     margin: auto;
-    margin-top: 6%;
+    margin-top: 12%;
 
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(3px);
