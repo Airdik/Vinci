@@ -8,6 +8,11 @@ const routes = require('./routes/routes')
 const cookieParser = require('cookie-parser');
 
 const app = express();
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+})
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
