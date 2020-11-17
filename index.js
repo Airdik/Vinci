@@ -50,7 +50,8 @@ app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', urlencodedParser, routes.verifyLogin);
 app.get('/create', routes.create);
-app.post('/create', routes.verifyCreate);
+//app.post('/create', routes.verifyCreate);
+app.post('/create', urlencodedParser, routes.createUser);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
 

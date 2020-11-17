@@ -1,4 +1,36 @@
 const path = require('path');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
+mongoose.connect('mongodb://localhost/data', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+});
+
+let mdb = mongoose.connection;
+mdb.on('error', console.error.bind(console, 'connection error'));
+mdb.once('open', callback => {
+
+});
+
+let userSchema = mongoose.Schema({
+    username: String,
+    password: String,
+    wins: Number,
+    losses: Number,
+    total_points: Number
+});
+
+let User = mongoose.model('User_Collection', userSchema);
+
+exports.index = (req, res) => {
+    User.find((err, user) => {
+        if (err) return console.error(err);
+        res.render('index', {
+            title: 'User_List'
+        });
+    });
+};
 
 exports.index = (req, res) => {
     let today = new Date();
@@ -73,6 +105,20 @@ exports.create = (req, res) => {
         script_src: 'create.js'
     })
 }
+
+exports.createUser = (req, res) => {
+    let user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        wins: 0,
+        losses: 0,
+        total_points: 0
+    });
+    user.save((err, user) => {
+        if (err) return console.error(err);
+        console.log(req.body.password + ' added');
+    });
+};
 
 // After user creates account add them to database
 exports.verifyCreate = (req, res) => {
