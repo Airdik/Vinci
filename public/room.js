@@ -1,3 +1,6 @@
+
+
+
 const canvasHolder = document.getElementById('canvasHolder');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -15,9 +18,13 @@ canvas.width = canvasHolder.clientWidth;
 
 //variables
 var painting = false;
+var oldWidth = canvasHolder.clientWidth;
+var oldHeight = canvasHolder.clientHeight;
+
 
 const startPosition = (evt) => {
     painting = true;
+    ctx.beginPath();
     draw(evt);
 }
 
@@ -30,11 +37,18 @@ const draw = (evt) => {
     if (!painting) return;
     ctx.lineWidth = 10;
     ctx.lineCap = 'round';
-    
+
 
     let pos = getCursorPosition(evt);
     console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
     console.log(`POS:${pos.x}, ${pos.y}`);
+
+    let data = {
+        x: pos.x,
+        y: pos.y
+    }
+    socket.emit('draw', data);
+
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
     ctx.beginPath();
@@ -43,7 +57,7 @@ const draw = (evt) => {
 
 
 
-const getCursorPosition = (evt)=> {
+const getCursorPosition = (evt) => {
     var ClientRect = canvas.getBoundingClientRect();
     return {
         x: Math.round(evt.clientX - ClientRect.left),
@@ -59,6 +73,30 @@ canvas.addEventListener('mouseout', finishPosition)
 canvas.addEventListener('mousemove', draw);
 
 window.onresize = () => {
-    canvas.height = canvasHolder.clientHeight;
-    canvas.width = canvasHolder.clientWidth;
+    // canvas.height = canvasHolder.clientHeight;
+    // canvas.width = canvasHolder.clientWidth;
+
+    let ratio1 = oldWidth / canvasHolder.clientWidth;
+    let ratio2 = oldHeight / canvasHolder.clientHeight;
+
+    ctx.scale(ratio1, ratio2);
+    oldWidth = canvasHolder.clientWidth;
+    oldHeight = canvasHolder.clientHeight;
+
 }
+
+
+
+
+
+
+///////// INCOMING SOCKET CODE HERE //////////////////////////////////
+socket.on('draw', data => {
+    ctx.lineWidth = 10;
+    ctx.lineCap = 'round';
+
+    ctx.lineTo(data.x, data.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(data.x, data.y);
+})

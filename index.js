@@ -76,6 +76,11 @@ app.get('/*', routes.lost);
 io.on('connection', socket => {
     socket.emit('first-connect', `Connected to socket! ID:${socket.id}`)
     console.log(`User connected, ID: ${socket.id}`)
+
+    socket.on('draw', data => {
+        socket.broadcast.emit('draw', data);
+        console.log(data);
+    })
 });
 
 
