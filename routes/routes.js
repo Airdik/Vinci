@@ -51,7 +51,7 @@ exports.verifyLogin = (req, res) => {
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
     if (req.body.username == 'user' && req.body.password == 'pass') {
-        // once user and pass are verified then we create a session
+        // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
         req.session.user = {
             isAuthenticated: true,
             username: req.body.username
