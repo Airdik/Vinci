@@ -57,6 +57,7 @@ app.get('/contact', routes.contact);
 // PRIVATE PAGES - Needs authentication - May include the lobby page, the actual play page etc.
 app.get('/private', checkAuth, routes.private);
 app.get('/play', checkAuth, routes.play);
+app.get('/room/:roomCode', checkAuth, routes.room)
 
 
 // Catch all 
@@ -93,7 +94,6 @@ io.on('connection', socket => {
 
 // Servers listening port
 server.listen(6969);
-
 
 
 

@@ -1,0 +1,155 @@
+html{
+    margin: 0;
+}
+body{
+    background-image: url('images/room-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+#bodyDiv{
+    margin: auto;
+
+    margin: auto;
+    margin-top: 2%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    
+    /* width: 1382px; */
+    width: 90%;
+    /* height: 610px; */
+    height: 80%;
+    
+    
+    text-align:center;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#allElementHolder{
+    display: flex;
+    background-color:green;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 20px;
+
+}
+
+#canvasHolder{
+    background-color: #ff3445;
+    width: 80%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    padding:0;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+#canvas{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+#canvas:hover{
+    cursor: pointer;
+}
+
+#chatHolder{
+    background-color: #ff3445;
+    float: right;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 20%;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#topDiv{
+    background-color: #ffc977;
+    padding: 0;
+    margin: 0;
+    height: 30%;
+    width: 100%;
+    border-top-right-radius: 20px;
+}
+#bottomDiv{
+    background-color: rgb(241, 241, 241);
+    padding: 0;
+    margin: 0;
+    height: 70%;
+    width: 100%;
+    border-bottom-right-radius: 20px;
+}
+#chatBox{
+    background-color: #ffe7c3;;
+    padding: 0;
+    margin: 0;
+    height: 88%;
+    width: 100%;
+
+}
+#chatFunctions{
+    display: flex;
+    background-color: rgb(145, 228, 97);
+    padding: 0;
+    margin: 0;
+    height: 12%;
+    width: 100%;
+    border-bottom-right-radius: 20px;
+}
+#messageBox{
+    background-color: rgb(52, 86, 241);
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 82%;
+}
+#messageText{
+    float: left;
+    padding: 0;
+    margin: 0;
+    height: 93%;
+    width: 90%;
+    outline: none;
+    font-size: 22px;
+    padding: 0% 5%;
+    background-color: #ffffff;
+    text-align: center;
+}
+#messageText:hover{
+    background-color: #dadada
+}
+#sendBtn{
+    background-color: #353738;;
+    padding: 0;
+    margin: 0;
+    height: 99.6%;
+    width: 18%;
+    border-bottom-right-radius: 20px;
+}
+
+#sendIcon{
+    color: #ffffff;
+    padding: 0;
+    margin-top: 5%;
+    height: 100%;
+    width: 100%;
+    font-size: 65px;
+}
+#sendIcon:hover{
+    cursor: pointer;
+    color: #ffc977;
+}

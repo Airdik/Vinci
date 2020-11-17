@@ -1,0 +1,30 @@
+extends layout
+
+block A
+
+    div(id='bodyDiv' class='body')
+
+        div(id='allElementHolder')
+
+            div(id='canvasHolder')
+                canvas(id='canvas')
+
+            div(id='chatHolder')
+
+                div(id='topDiv')
+
+                div(id='bottomDiv')
+
+                    div(id='chatBox')
+
+                    div(id='chatFunctions')    
+
+                        div(id='messageBox')
+                            input(id='messageText' placeholder='Guess...' type='text' autocomplete='off')
+
+                        div(id='sendBtn')
+                            p(id='sendIcon') ^
+        
+    script(defer src="/room.js") 
+
+

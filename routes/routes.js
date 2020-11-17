@@ -92,7 +92,15 @@ exports.play = (req, res) => {
         title: 'Play',
         icon_href: '/images/play.png',
         css_href: '/play.css'
-    })
+    });
+}
+
+exports.room = (req, res) => {
+    res.render('room', {
+        title: 'Room',
+        icon_href: '/images/room.png',
+        css_href: '/room.css'
+    });
 }
 
 

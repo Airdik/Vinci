@@ -7,9 +7,6 @@ const joinCode = document.getElementById('joinCode');
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
 const socket = io.connect('http://localhost:6969')
 
-socket.on('first-connect', data => {
-    console.log(data);
-});
 
 const codePattern = /^d\/{4,}$/g
 
@@ -21,4 +18,14 @@ const join = document.getElementById('join').addEventListener('click', () => {
 });
 const findRoom = document.getElementById('findRoom').addEventListener('click', () => {
 
+});
+
+
+
+
+
+
+// SOCKET CODE HERE
+socket.on('first-connect', data => {
+    console.log(data);
 });
