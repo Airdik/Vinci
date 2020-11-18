@@ -17,7 +17,6 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 
-
 // Things the app is using
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
@@ -50,6 +49,9 @@ app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', urlencodedParser, routes.verifyLogin);
 app.get('/create', routes.create);
+app.post('/create', urlencodedParser, routes.createUser);
+app.get('/about', routes.about);
+app.get('/contact', routes.contact);
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -59,15 +61,11 @@ app.get('/logout', (req, res) => {
         }
     })
 });
-//app.post('/create', routes.verifyCreate);
-app.post('/create', urlencodedParser, routes.createUser);
-app.get('/about', routes.about);
-app.get('/contact', routes.contact);
 
 // PRIVATE PAGES - Needs authentication - May include the lobby page, the actual play page etc.
 app.get('/private', checkAuth, routes.private);
 app.get('/play', checkAuth, routes.play);
-app.get('/room/:roomCode', checkAuth, routes.room)
+app.get('/room/:roomCode', checkAuth, routes.room);
 
 
 // Catch all 
@@ -91,6 +89,9 @@ io.on('connection', socket => {
         socket.broadcast.emit('draw', data);
         console.log(data);
     });
+    socket.on('mouse-up', data => {
+        socket.broadcast.emit('mouse-up', data);
+    })
 
     //All users data
     socket.on('new-user', name => {
@@ -103,6 +104,8 @@ io.on('connection', socket => {
     socket.on('chat-message', message => {
         socket.broadcast.emit('chat-message', {message, name: users[socket.id]});
     });
+
+
 
 
 

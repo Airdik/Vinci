@@ -16,9 +16,9 @@ const create = document.getElementById('create').addEventListener('click', () =>
 const join = document.getElementById('join').addEventListener('click', () => {
     console.log("JOIN CLICKED");
 });
-const findRoom = document.getElementById('findRoom').addEventListener('click', () => {
+// const findRoom = document.getElementById('findRoom').addEventListener('click', () => {
 
-});
+// });
 
 
 

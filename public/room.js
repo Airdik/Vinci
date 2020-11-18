@@ -18,6 +18,8 @@ canvas.width = canvasHolder.clientWidth;
 var painting = false;
 var oldWidth = canvasHolder.clientWidth;
 var oldHeight = canvasHolder.clientHeight;
+var lastPosX = -50;
+var lastPosY = -50;
 
 
 // MESSAGES
@@ -32,19 +34,27 @@ const startPosition = (evt) => {
     draw(evt);
 }
 
-const finishPosition = () => {
+const finishPosition = (evt) => {
+    console.log('EVENT SENT')
+    socket.emit('mouse-up', true);
+   
     painting = false;
     ctx.beginPath();
 }
 
 const draw = (evt) => {
-    if (!painting) return;
+    
+    if (!painting) { 
+        
+        return;
+    }
+    
     ctx.lineWidth = 10;
     ctx.lineCap = 'round';
-
+    
 
     let pos = getCursorPosition(evt);
-    console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
+    // console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
     console.log(`POS:${pos.x}, ${pos.y}`);
 
     let data = {
@@ -52,6 +62,7 @@ const draw = (evt) => {
         y: pos.y
     }
     socket.emit('draw', data);
+
 
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
@@ -135,6 +146,9 @@ window.onload = () => {
 
 
 ///////// INCOMING SOCKET CODE HERE //////////////////////////////////
+socket.on('mouse-up', (data) => {
+    ctx.beginPath();
+});
 socket.on('draw', data => {
     ctx.lineWidth = 10;
     ctx.lineCap = 'round';
@@ -143,6 +157,10 @@ socket.on('draw', data => {
     ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(data.x, data.y);
+
+    //Logging las received x y points from different users
+    lastPosX = data.x;
+    lastPosY = data.y;
 });
 
 // When a message is received
