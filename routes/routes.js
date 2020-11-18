@@ -1,5 +1,6 @@
 const path = require('path');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost/data', {
@@ -121,11 +122,13 @@ exports.create = (req, res) => {
 
 // Creating user in the database
 exports.createUser = (req, res) => {
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(req.body.password, salt);
     let user = new User({
         firstName: req.body.fname,
         lastName: req.body.lname,
         username: req.body.username,
-        password: req.body.password,
+        password: hash,
         email: req.body.email,
         wins: 0,
         losses: 0,
@@ -133,7 +136,7 @@ exports.createUser = (req, res) => {
     });
     user.save((err, user) => {
         if (err) return console.error(err);
-        console.log(req.body.password + ' added');
+        console.log(req.body.hash + ' added');
     });
     res.redirect('/login');
 };
