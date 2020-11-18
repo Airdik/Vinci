@@ -121,6 +121,7 @@ exports.create = (req, res) => {
 
 // Creating user in the database
 exports.createUser = (req, res) => {
+    // Might want to do hashAndSalt(req.body.password) function here or something to return the hashed and salted password before saving to db
     let user = new User({
         firstName: req.body.fname,
         lastName: req.body.lname,
