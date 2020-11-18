@@ -14,8 +14,11 @@ mdb.once('open', callback => {
 });
 
 let userSchema = mongoose.Schema({
+    firstName: String,
+    lastName: String,
     username: String,
     password: String,
+    email: String,
     wins: Number,
     losses: Number,
     total_points: Number
@@ -23,14 +26,15 @@ let userSchema = mongoose.Schema({
 
 let User = mongoose.model('User_Collection', userSchema);
 
-exports.index = (req, res) => {
-    User.find((err, user) => {
-        if (err) return console.error(err);
-        res.render('index', {
-            title: 'User_List'
-        });
-    });
-};
+//// ?? Don't need this we are not printing out every user on the homepage
+// exports.index = (req, res) => {
+//     User.find((err, user) => {
+//         if (err) return console.error(err);
+//         res.render('index', {
+//             title: 'User_List'
+//         });
+//     });
+// };
 
 exports.index = (req, res) => {
     let today = new Date();
@@ -42,7 +46,14 @@ exports.index = (req, res) => {
     } else {
         displayDate = `Welcome!`
     }
-    
+
+    //// TEST - Logging to console to see print all users in database
+    User.find((err, user) => {
+        if (err) return console.error(err);
+        console.log(user);
+    });
+    // User.collection.remove();
+
     res.cookie('lastVisit', date, { maxAge: 999999999999 });
 
     res.render('index', {
@@ -50,6 +61,8 @@ exports.index = (req, res) => {
         icon_href: '/images/home.png',
         lastVisitedTime: displayDate
     });
+
+
 }
 
 // LOGIN page
@@ -106,10 +119,14 @@ exports.create = (req, res) => {
     })
 }
 
+// Creating user in the database
 exports.createUser = (req, res) => {
     let user = new User({
+        firstName: req.body.fname,
+        lastName: req.body.lname,
         username: req.body.username,
         password: req.body.password,
+        email: req.body.email,
         wins: 0,
         losses: 0,
         total_points: 0
@@ -118,6 +135,7 @@ exports.createUser = (req, res) => {
         if (err) return console.error(err);
         console.log(req.body.password + ' added');
     });
+    res.redirect('/login');
 };
 
 // After user creates account add them to database
