@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/data', {
+mongoose.connect('mongodb+srv://user:pass@cluster0.zylfw.mongodb.net/users?retryWrites=true&w=majority', {
     useUnifiedTopology: true,
     useNewUrlParser: true
 });
@@ -136,7 +136,7 @@ exports.createUser = (req, res) => {
     });
     user.save((err, user) => {
         if (err) return console.error(err);
-        console.log(req.body.hash + ' added');
+        console.log(user.firstName + ' added');
     });
     res.redirect('/login');
 };
