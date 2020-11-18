@@ -27,16 +27,6 @@ let userSchema = mongoose.Schema({
 
 let User = mongoose.model('User_Collection', userSchema);
 
-//// ?? Don't need this we are not printing out every user on the homepage
-// exports.index = (req, res) => {
-//     User.find((err, user) => {
-//         if (err) return console.error(err);
-//         res.render('index', {
-//             title: 'User_List'
-//         });
-//     });
-// };
-
 exports.index = (req, res) => {
     let today = new Date();
     let date = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}     ${(today.getHours() + 24) % 12 || 12}:${today.getMinutes()}:${today.getSeconds()}`
@@ -122,12 +112,8 @@ exports.create = (req, res) => {
 
 // Creating user in the database
 exports.createUser = (req, res) => {
-<<<<<<< HEAD
-    // Might want to do hashAndSalt(req.body.password) function here or something to return the hashed and salted password before saving to db
-=======
     let salt = bcrypt.genSaltSync(10);
     let hash = bcrypt.hashSync(req.body.password, salt);
->>>>>>> 1d4fb80b449ed3c6c1a6f670e9a41d1adfbcb75d
     let user = new User({
         firstName: req.body.fname,
         lastName: req.body.lname,
@@ -140,7 +126,7 @@ exports.createUser = (req, res) => {
     });
     user.save((err, user) => {
         if (err) return console.error(err);
-        console.log(req.body.hash + ' added');
+        console.log(hash + ' added');
     });
     res.redirect('/login');
 };

@@ -50,6 +50,15 @@ app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', urlencodedParser, routes.verifyLogin);
 app.get('/create', routes.create);
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/');
+        }
+    })
+});
 //app.post('/create', routes.verifyCreate);
 app.post('/create', urlencodedParser, routes.createUser);
 app.get('/about', routes.about);
