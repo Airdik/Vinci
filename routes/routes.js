@@ -81,22 +81,54 @@ exports.contact = (req, res) => {
     })
 }
 
+var findByUsername = function(username, done){
+    User.find({"username": username}, (err, data)=>{
+        if(err) return done(err)
+        return done(null, data)
+    })
+};
+
 // Check user info against the database
 exports.verifyLogin = (req, res) => {
 
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
-    if (req.body.username == 'user' && req.body.password == 'pass') {
+
+
+
+    let salt = bcrypt.genSaltSync(10);
+    let hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+
+
+    let User = mongoose.model('User_Collection', userSchema);
+
+    let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
+        if(err) return handleError(err);
+        console.log(user.username);
+    });
+
+    let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
+        if(err) return handleError(err);
+        //console.log(user.password);
+    });
+    
+    
+    
+
+    if (foundUsername && foundPassword){
         // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
         req.session.user = {
             isAuthenticated: true,
             username: req.body.username
         }
+        console.log(req.body.username + ": Authenticated");
         //Once logged in redirect to this page
         res.redirect('/play');
     } else {
         // if could not verify then do this
         res.redirect('/login');
+        console.log("Failed to login");
     }
 }
 
@@ -129,6 +161,7 @@ exports.createUser = (req, res) => {
         console.log(user.firstName + ' added');
     });
     res.redirect('/login');
+    
 };
 
 // After user creates account add them to database
