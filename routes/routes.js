@@ -126,11 +126,7 @@ exports.createUser = (req, res) => {
     });
     user.save((err, user) => {
         if (err) return console.error(err);
-<<<<<<< HEAD
-        console.log(hash + ' added');
-=======
         console.log(user.firstName + ' added');
->>>>>>> a8adebfbd0fd02863842a1cbcd5248ed2f4f35b3
     });
     res.redirect('/login');
 };

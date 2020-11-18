@@ -82,14 +82,30 @@ app.get('/*', routes.lost);
 
 
 /////////////////// SOCKET CODE HERE //////////////////////////////////////////
-io.on('connection', socket => {
-    socket.emit('first-connect', `Connected to socket! ID:${socket.id}`)
-    console.log(`User connected, ID: ${socket.id}`)
+const users = {}
 
+io.on('connection', socket => {
+
+    // Drawing data
     socket.on('draw', data => {
         socket.broadcast.emit('draw', data);
         console.log(data);
-    })
+    });
+
+    //All users data
+    socket.on('new-user', name => {
+        users[socket.id] = name;
+        socket.broadcast.emit('user-connected', name);
+    });
+    
+
+    // Chat data
+    socket.on('chat-message', message => {
+        socket.broadcast.emit('chat-message', {message, name: users[socket.id]});
+    });
+
+
+
 });
 
 
