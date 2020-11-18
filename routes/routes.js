@@ -43,7 +43,7 @@ exports.index = (req, res) => {
         if (err) return console.error(err);
         console.log(user);
     });
-    // User.collection.remove();
+    //User.collection.remove();
 
     res.cookie('lastVisit', date, { maxAge: 999999999999 });
 
