@@ -12,7 +12,7 @@ block A
         
         div(id='contentDiv' class='contactContentHolder')
 
-            form(id='contactform' method='GET' action='/contact' autocomplete='off' onsubmit= 'return validate(event)')
+            form(id='contactform' method='GET' action='/' autocomplete='off' onsubmit= 'return validate(event)')
                 div(class='inputDiv')
                     h5(class='inputHeadding') First Name
                     input(id='fname' type='text' placeholder='Enter First Name Here' name='fname' autocomplete='off')
@@ -30,7 +30,7 @@ block A
                     textarea(id='contactMessage' type="text" name='message' placeholder="Enter Message Here" autocomplete="off")
 
                 div
-                    input(class='btn' id='contactSubmitBtn' type='submit' value='SUBMIT MESSAGE' href='/')
+                    input(class='btn' id='contactSubmitBtn' type='submit' value='SUBMIT MESSAGE' )
 
 
 //- block A

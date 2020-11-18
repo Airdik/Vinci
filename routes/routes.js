@@ -156,7 +156,8 @@ exports.room = (req, res) => {
     res.render('room', {
         title: 'Room',
         icon_href: '/images/room.png',
-        css_href: '/room.css'
+        css_href: '/room.css',
+        username: req.session.user
     });
 }
 
