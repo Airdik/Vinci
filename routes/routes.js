@@ -104,14 +104,17 @@ exports.verifyLogin = (req, res) => {
     let User = mongoose.model('User_Collection', userSchema);
 
     let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
-        if(err) return handleError(err);
-        console.log(user.username);
+        if (err) return console.log(err);
+        //console.log(user.username);
     });
 
     let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
-        if(err) return handleError(err);
+        if (err) return console.log(err);
         //console.log(user.password);
     });
+
+    console.log('foundUsername',foundUsername);
+    console.log('foundPassword',foundPassword);
     
     
     
@@ -186,11 +189,13 @@ exports.play = (req, res) => {
 }
 
 exports.room = (req, res) => {
+    let username = req.session.user.username;
+    console.log('Room username', username);
     res.render('room', {
         title: 'Room',
         icon_href: '/images/room.png',
         css_href: '/room.css',
-        username: req.session.user
+        username
     });
 }
 

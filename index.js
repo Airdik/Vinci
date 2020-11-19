@@ -80,6 +80,7 @@ app.get('/*', routes.lost);
 
 
 /////////////////// SOCKET CODE HERE //////////////////////////////////////////
+const rooms = {}
 const users = {}
 
 io.on('connection', socket => {
@@ -99,7 +100,6 @@ io.on('connection', socket => {
         socket.broadcast.emit('user-connected', name);
     });
     
-
     // Chat data
     socket.on('chat-message', message => {
         socket.broadcast.emit('chat-message', {message, name: users[socket.id]});
