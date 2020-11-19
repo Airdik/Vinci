@@ -30,7 +30,7 @@ let User = mongoose.model('User_Collection', userSchema);
 exports.index = (req, res) => {
     let today = new Date();
     let date = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}     ${(today.getHours() + 24) % 12 || 12}:${today.getMinutes()}:${today.getSeconds()}`
-    
+
     let displayDate = '';
     if (req.cookies.lastVisit) {
         displayDate = `Last Visited: ${req.cookies.lastVisit}`;
@@ -81,9 +81,9 @@ exports.contact = (req, res) => {
     })
 }
 
-var findByUsername = function(username, done){
-    User.find({"username": username}, (err, data)=>{
-        if(err) return done(err)
+var findByUsername = function (username, done) {
+    User.find({ "username": username }, (err, data) => {
+        if (err) return done(err)
         return done(null, data)
     })
 };
@@ -93,65 +93,29 @@ exports.verifyLogin = async (req, res) => {
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
 
-    const user = await User.findOne({username: req.body.username});
-    console.log(user + req.body.username);  
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    console.log(validPassword + req.body.password);    
-
-    // let foundUsername = User.findOne({'username' : importedName},function (err, user){
-    //     if(err) return handleError(err);
-    //     console.log(user.username);
-    // });
-
-    // let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
-    //     if(err) return handleError(err);
-    //     //console.log(user.password);
-    // });
-
-
-
-
-    // let salt = bcrypt.genSaltSync(10);
-    // let hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
-
-
-    // let User = mongoose.model('User_Collection', userSchema);
-
-    // let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
-    //     if (err) return console.log(err);
-    //     //console.log(user.username);
-    // });
-
-    // let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
-    //     if (err) return console.log(err);
-    //     //console.log(user.password);
-    // });
-
-    // console.log('foundUsername',foundUsername);
-    // console.log('foundPassword',foundPassword);
-
-    
-    
-    
-
-    if (user && validPassword){
-        // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
-        req.session.user = {
-            isAuthenticated: true,
-            username: user
+    let user = await User.findOne({ username: req.body.username });
+    if (user == null) {
+        res.redirect('/login');
+        console.log(`*Username: "${req.body.username}" not found in database.*`);
+    } else {
+        let validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (validPassword) {
+            // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
+            req.session.user = {
+                isAuthenticated: true,
+                username: user.username
+            }
+            console.log(`User: "${req.body.username}" was authenticated.`);
+            //Once logged in redirect to this page
+            res.redirect('/play');
+        } else {
+            res.redirect('/login');
+            console.log(`*Failed to log in, user "${req.body.username}" entered the wrong password.`);
         }
-        console.log(req.body.username + ": Authenticated");
-        //Once logged in redirect to this page
-        res.redirect('/play');
-    } if(validPassword === 'null' || user === 'null'){
-        res.redirect('/login');
-    }
-     else {
-        res.redirect('/login');
-        console.log("Failed to login");
 
     }
+
+
 }
 
 // CREATE page
@@ -183,7 +147,7 @@ exports.createUser = (req, res) => {
         console.log(user.firstName + ' added');
     });
     res.redirect('/login');
-    
+
 };
 
 // After user creates account add them to database
