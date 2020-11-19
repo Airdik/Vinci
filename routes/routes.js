@@ -92,7 +92,7 @@ var findByUsername = function(username, done){
 exports.verifyLogin = async (req, res) => {
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
-<<<<<<< HEAD
+
     const user = await User.findOne({username: req.body.username});
     console.log(user + req.body.username);  
     const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -107,30 +107,30 @@ exports.verifyLogin = async (req, res) => {
     //     if(err) return handleError(err);
     //     //console.log(user.password);
     // });
-=======
 
 
 
-    let salt = bcrypt.genSaltSync(10);
-    let hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+    // let salt = bcrypt.genSaltSync(10);
+    // let hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
 
 
-    let User = mongoose.model('User_Collection', userSchema);
+    // let User = mongoose.model('User_Collection', userSchema);
 
-    let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
-        if (err) return console.log(err);
-        //console.log(user.username);
-    });
+    // let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
+    //     if (err) return console.log(err);
+    //     //console.log(user.username);
+    // });
 
-    let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
-        if (err) return console.log(err);
-        //console.log(user.password);
-    });
+    // let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
+    //     if (err) return console.log(err);
+    //     //console.log(user.password);
+    // });
 
-    console.log('foundUsername',foundUsername);
-    console.log('foundPassword',foundPassword);
->>>>>>> 64d65e2d65dd1fa6f171ea894c67afd8ed63c4ff
+    // console.log('foundUsername',foundUsername);
+    // console.log('foundPassword',foundPassword);
+
     
     
     
