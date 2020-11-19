@@ -90,6 +90,16 @@ body{
     width: 100%;
     border-top-right-radius: 20px;
 }
+#username{
+    margin: 0;
+    font-size:18px;
+}
+#word{
+    margin: 0;
+    margin-top: 5px;
+    font-size: 22px;
+}
+
 #bottomDiv{
     background-color: #ffe7c3;
     padding: 0;
