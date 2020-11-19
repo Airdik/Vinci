@@ -89,49 +89,68 @@ var findByUsername = function(username, done){
 };
 
 // Check user info against the database
-exports.verifyLogin = (req, res) => {
-
+exports.verifyLogin = async (req, res) => {
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
 
+    const user = await User.findOne({username: req.body.username});
+    console.log(user + req.body.username);  
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    console.log(validPassword + req.body.password);    
+
+    // let foundUsername = User.findOne({'username' : importedName},function (err, user){
+    //     if(err) return handleError(err);
+    //     console.log(user.username);
+    // });
+
+    // let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
+    //     if(err) return handleError(err);
+    //     //console.log(user.password);
+    // });
 
 
-    let salt = bcrypt.genSaltSync(10);
-    let hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+
+    // let salt = bcrypt.genSaltSync(10);
+    // let hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
 
 
-    let User = mongoose.model('User_Collection', userSchema);
+    // let User = mongoose.model('User_Collection', userSchema);
 
-    let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
-        if (err) return console.log(err);
-        //console.log(user.username);
-    });
+    // let foundUsername = User.findOne({'username' : req.body.username},function (err, user){
+    //     if (err) return console.log(err);
+    //     //console.log(user.username);
+    // });
 
-    let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
-        if (err) return console.log(err);
-        //console.log(user.password);
-    });
+    // let foundPassword = User.findOne({'password' : hashedPassword},function (err, user){
+    //     if (err) return console.log(err);
+    //     //console.log(user.password);
+    // });
 
-    console.log('foundUsername',foundUsername);
-    console.log('foundPassword',foundPassword);
+    // console.log('foundUsername',foundUsername);
+    // console.log('foundPassword',foundPassword);
+
     
     
     
 
-    if (foundUsername && foundPassword){
+    if (user && validPassword){
         // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
         req.session.user = {
             isAuthenticated: true,
-            username: req.body.username
+            username: user
         }
         console.log(req.body.username + ": Authenticated");
         //Once logged in redirect to this page
         res.redirect('/play');
-    } else {
-        // if could not verify then do this
+    } if(validPassword === 'null' || user === 'null'){
+        res.redirect('/login');
+    }
+     else {
         res.redirect('/login');
         console.log("Failed to login");
+
     }
 }
 
