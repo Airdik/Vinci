@@ -130,24 +130,35 @@ exports.create = (req, res) => {
 
 // Creating user in the database
 exports.createUser = (req, res) => {
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(req.body.password, salt);
-    let user = new User({
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        username: req.body.username,
-        password: hash,
-        email: req.body.email,
-        wins: 0,
-        losses: 0,
-        total_points: 0
-    });
-    user.save((err, user) => {
-        if (err) return console.error(err);
-        console.log(user.firstName + ' added');
-    });
-    res.redirect('/login');
-
+    let dbUser = User.findOne({username: req.body.username});
+    if (dbUser !== null) {
+        res.render('create', {
+            title: 'Create Account',
+            icon_href: '/images/create.png',
+            css_href: '/create.css',
+            script_src: 'create.js',
+            UsernameExists: `*Username: "${req.body.username}" already exists. Please choose a new username.*`
+        });
+        console.log(`*Username: "${req.body.username}" already exists.*`);
+    } else {
+        let salt = bcrypt.genSaltSync(10);
+        let hash = bcrypt.hashSync(req.body.password, salt);
+        let user = new User({
+            firstName: req.body.fname,
+            lastName: req.body.lname,
+            username: req.body.username,
+            password: hash,
+            email: req.body.email,
+            wins: 0,
+            losses: 0,
+            total_points: 0
+        });
+        user.save((err, user) => {
+            if (err) return console.error(err);
+            console.log(user.firstName + ' added');
+        });
+        res.redirect('/login');
+    };
 };
 
 // After user creates account add them to database
