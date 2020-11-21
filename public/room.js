@@ -49,7 +49,10 @@ document.getElementById('clear').addEventListener('click', evt => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     socket.emit('clear', evt);
 })
-
+const colorPick = document.getElementById('colorPick');
+colorPick.addEventListener('change', evt => {
+    paintColor = colorPick.value;
+})
 
 
 

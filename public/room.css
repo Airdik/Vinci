@@ -98,12 +98,17 @@ input{
     width: 100%;
     flex: 1;
 }
-.item{
-    margin: auto;
-    padding:auto;
-    width: 100%;
+#colorPick{
+    margin: 0;
+    width: 60%;
     height: 100%;
-    color: #ff3445;
+}
+input::-webkit-color-swatch {
+    border: none;
+}
+
+#colorPick:hover{
+    cursor: pointer;
 }
 .fa:hover{
     cursor: pointer;
