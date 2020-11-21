@@ -5,8 +5,6 @@ body{
     background-repeat: no-repeat;
 }
 
-
-
 .contentHolder{
     text-align: center;
     margin: auto;
@@ -144,4 +142,15 @@ input:hover{
     cursor: pointer;
     color: chocolate;
     transition: .5s;
+}
+
+.username-exists {
+    color: red;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    padding-top: 0;
 }
