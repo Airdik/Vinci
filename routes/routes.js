@@ -114,8 +114,6 @@ exports.verifyLogin = async (req, res) => {
         }
 
     }
-
-
 }
 
 // CREATE page
@@ -130,6 +128,7 @@ exports.create = (req, res) => {
 
 // Creating user in the database
 exports.createUser = (req, res) => {
+    
     let salt = bcrypt.genSaltSync(10);
     let hash = bcrypt.hashSync(req.body.password, salt);
     let user = new User({

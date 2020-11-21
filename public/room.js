@@ -1,10 +1,12 @@
-
 //// USE WHEN CLIENT IS SEPARATE FROM SERVER MACHINE
 // const                   http:server_ip:server_port
 //const socket = io.connect('http://192.168.1.221:6969')
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
 const socket = io.connect('http://localhost:6969')
 
+// Drawing variables
+var brushSize = 18;
+var paintColor = 'Black';
 
 // CANVAS
 const canvasHolder = document.getElementById('canvasHolder');
@@ -22,6 +24,38 @@ var lastPosX = -50;
 var lastPosY = -50;
 
 
+// DRAWING TOOLS STUFF
+document.querySelectorAll('.brush').forEach(item => {
+    item.addEventListener('click', evt => {
+        if (evt.target.id === '1') {
+            brushSize = 12;
+        } else if (evt.target.id === '2') {
+            brushSize = 18;
+        } else {
+            brushSize = 26;
+        }
+    })
+})
+
+document.querySelectorAll('.color').forEach(item => {
+    item.addEventListener('click', evt => {
+        paintColor = evt.target.id;
+    })
+})
+document.getElementById('erase').addEventListener('click', evt => {
+    paintColor = 'White';
+})
+document.getElementById('clear').addEventListener('click', evt => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    socket.emit('clear', evt);
+})
+
+
+
+
+
+
+
 // MESSAGES
 const chatBox = document.getElementById('chatBox');
 const messageText = document.getElementById('messageText');
@@ -37,21 +71,22 @@ const startPosition = (evt) => {
 const finishPosition = (evt) => {
     console.log('EVENT SENT')
     socket.emit('mouse-up', true);
-   
+
     painting = false;
     ctx.beginPath();
 }
 
 const draw = (evt) => {
-    
-    if (!painting) { 
-        
+
+    if (!painting) {
+
         return;
     }
-    
-    ctx.lineWidth = 10;
+
+    ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
-    
+    ctx.strokeStyle = paintColor;
+
 
     let pos = getCursorPosition(evt);
     // console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
@@ -59,7 +94,9 @@ const draw = (evt) => {
 
     let data = {
         x: pos.x,
-        y: pos.y
+        y: pos.y,
+        color: paintColor,
+        size: brushSize
     }
     socket.emit('draw', data);
 
@@ -102,7 +139,7 @@ const sendMessage = () => {
     } else {
         appendMessage("WHAT!");
     }
-    
+
 }
 
 
@@ -136,7 +173,6 @@ window.onresize = () => {
 
 }
 window.onload = () => {
-    name = prompt('What would you like to go by?');
     appendMessage('You have joined');
     socket.emit('new-user', name);
 }
@@ -150,8 +186,9 @@ socket.on('mouse-up', (data) => {
     ctx.beginPath();
 });
 socket.on('draw', data => {
-    ctx.lineWidth = 10;
+    ctx.lineWidth = data.size;
     ctx.lineCap = 'round';
+    ctx.strokeStyle = data.color;
 
     ctx.lineTo(data.x, data.y);
     ctx.stroke();
@@ -162,6 +199,11 @@ socket.on('draw', data => {
     lastPosX = data.x;
     lastPosY = data.y;
 });
+
+socket.on('clear', data => {
+    console.log("clear event received")
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
 
 // When a message is received
 socket.on('chat-message', data => {
