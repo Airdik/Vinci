@@ -127,18 +127,11 @@ exports.create = (req, res) => {
 }
 
 // Creating user in the database
-exports.createUser = (req, res) => {
-    let dbUser = User.findOne({username: req.body.username});
-    if (dbUser !== null) {
-        res.render('create', {
-            title: 'Create Account',
-            icon_href: '/images/create.png',
-            css_href: '/create.css',
-            script_src: 'create.js',
-            UsernameExists: `*Username: "${req.body.username}" already exists. Please choose a new username.*`
-        });
-        console.log(`*Username: "${req.body.username}" already exists.*`);
-    } else {
+exports.createUser = async (req, res) => {
+    let dbUser = await User.findOne({ username: req.body.username });
+ 
+    if (dbUser == null) {
+
         let salt = bcrypt.genSaltSync(10);
         let hash = bcrypt.hashSync(req.body.password, salt);
         let user = new User({
@@ -156,7 +149,16 @@ exports.createUser = (req, res) => {
             console.log(user.firstName + ' added');
         });
         res.redirect('/login');
-    };
+    } else {
+        res.render('create', {
+            title: 'Create Account',
+            icon_href: '/images/create.png',
+            css_href: '/create.css',
+            script_src: 'create.js',
+            UsernameExists: `*Username: "${req.body.username}" already exists. Please choose a new username.*`
+        });
+        console.log(`*Username: "${req.body.username}" already exists.*`);
+    }
 };
 
 // After user creates account add them to database
@@ -181,13 +183,18 @@ exports.play = (req, res) => {
 }
 
 exports.room = (req, res) => {
+
+    if (rooms[req.params.roomCode] == null) {
+        return res.redirect('/play')
+    }
     let username = req.session.user.username;
     console.log('Room username', username);
     res.render('room', {
         title: 'Room',
         icon_href: '/images/room.png',
         css_href: '/room.css',
-        username
+        username,
+        roomCode: req.params.roomCode
     });
 }
 

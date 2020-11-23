@@ -7,6 +7,8 @@ const path = require('path');
 const routes = require('./routes/routes')
 const cookieParser = require('cookie-parser');
 
+const rooms = {}
+
 const app = express();
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -65,7 +67,32 @@ app.get('/logout', (req, res) => {
 // PRIVATE PAGES - Needs authentication - May include the lobby page, the actual play page etc.
 app.get('/private', checkAuth, routes.private);
 app.get('/play', checkAuth, routes.play);
-app.get('/room/:roomCode', checkAuth, routes.room);
+
+app.post('/room', urlencodedParser, (req, res) => {
+    console.log('Room CODE:', req.body.roomCode)
+
+    if (rooms[req.body.roomCode] != null) {
+        return res.redirect('/play')
+    }
+    rooms[req.body.roomCode] = { users: {} }
+    res.redirect(`/room/${req.body.roomCode}`)
+});
+
+app.get('/room/:roomCode', checkAuth, (req, res) => {
+
+    if (rooms[req.params.roomCode] == null) {
+        return res.redirect('/play')
+    }
+    let username = req.session.user.username;
+    console.log('Room username', username);
+    res.render('room', {
+        title: 'Room',
+        icon_href: '/images/room.png',
+        css_href: '/room.css',
+        username,
+        roomCode: req.params.roomCode
+    });
+});
 
 
 // Catch all 
@@ -80,47 +107,59 @@ app.get('/*', routes.lost);
 
 
 /////////////////// SOCKET CODE HERE //////////////////////////////////////////
-const rooms = {}
-const users = {}
+
 
 io.on('connection', socket => {
 
+      //All users data
+    socket.on('new-user', (roomCode, name) => {
+        socket.join(roomCode)
+        rooms[roomCode].users[socket.id] = name;
+        socket.to(roomCode).broadcast.emit('user-connected', name);
+    });
+
     // Drawing data
-    socket.on('draw', data => {
-        socket.broadcast.emit('draw', data);
+    socket.on('draw', (roomCode, data) => {
+        socket.to(roomCode).broadcast.emit('draw', data);
         console.log(data);
     });
-    socket.on('clear', data => {
-        socket.broadcast.emit('clear', data);
+    socket.on('clear', (roomCode, data) => {
+        socket.to(roomCode).broadcast.emit('clear', data);
     })
-    socket.on('mouse-up', data => {
-        socket.broadcast.emit('mouse-up', data);
+    socket.on('mouse-up', (roomCode, data) => {
+        socket.to(roomCode).broadcast.emit('mouse-up', data);
     })
 
-    //All users data
-    socket.on('new-user', name => {
-        users[socket.id] = name;
-        socket.broadcast.emit('user-connected', name);
-    });
+  
     
     // Chat data
-    socket.on('chat-message', message => {
-        socket.broadcast.emit('chat-message', {message, name: users[socket.id]});
+    socket.on('chat-message', (roomCode, message) => {
+        socket.to(roomCode).broadcast.emit('chat-message', {message, name: rooms[roomCode].users[socket.id]});
     });
 
 
+
+    //User Disconnect
+    socket.on('disconnect', () => {
+        
+        getUserRooms(socket).forEach(roomCode => {
+            socket.to(roomCode).broadcast.emit('user-disconnected', `User: ${rooms[roomCode].users[socket.id]} disconnected.`);
+            delete rooms[roomCode].users[socket.id];
+        })
+        
+    })
 
 
 
 });
 
 
-
-
-
-
-
-
+function getUserRooms(socket) {
+    return Object.entries(rooms).reduce((names, [name, roomCode]) => {
+        if (roomCode.users[socket.id] != null) names.push(name)
+        return names
+    }, [])
+}
 
 
 

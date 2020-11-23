@@ -61,6 +61,9 @@ block A
                     div(id='wordHolder')
                         p(id='word') A B C D E F G H I J K L M N
 
+                    div(id='timeHolder')
+                        p(id='time') 60 seconds
+
                 div(id='bottomDiv')
 
                     div(id='chatBox')
@@ -73,7 +76,12 @@ block A
                         div(id='sendBtn')
                             p(id='sendIcon') ^
     
+    
+
     script(defer src="/socket.io/socket.io.js")
+    script.
+        const roomCode = "#{roomCode}";
+        const name = "#{username}"
     script(defer src="/room.js") 
 
 

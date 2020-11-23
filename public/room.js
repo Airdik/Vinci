@@ -4,6 +4,7 @@
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
 const socket = io.connect('http://localhost:6969')
 
+
 // Drawing variables
 var brushSize = 18;
 var paintColor = 'Black';
@@ -47,7 +48,7 @@ document.getElementById('erase').addEventListener('click', evt => {
 })
 document.getElementById('clear').addEventListener('click', evt => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    socket.emit('clear', evt);
+    socket.emit('clear', roomCode, evt);
 })
 const colorPick = document.getElementById('colorPick');
 colorPick.addEventListener('change', evt => {
@@ -73,7 +74,7 @@ const startPosition = (evt) => {
 
 const finishPosition = (evt) => {
     console.log('EVENT SENT')
-    socket.emit('mouse-up', true);
+    socket.emit('mouse-up', roomCode, true);
 
     painting = false;
     ctx.beginPath();
@@ -101,7 +102,7 @@ const draw = (evt) => {
         color: paintColor,
         size: brushSize
     }
-    socket.emit('draw', data);
+    socket.emit('draw', roomCode, data);
 
 
     ctx.lineTo(pos.x, pos.y);
@@ -128,7 +129,7 @@ const appendMessage = (message) => {
     chatBox.append(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-var name = 'Random User';
+
 
 
 const sendMessage = () => {
@@ -136,11 +137,11 @@ const sendMessage = () => {
     console.log("IN HERE");
 
     if (message.trim().length > 0) {
-        socket.emit('chat-message', message);
+        socket.emit('chat-message', roomCode, message);
         appendMessage(`You: ${message}`);
         messageText.value = '';
     } else {
-        appendMessage("WHAT!");
+        appendMessage("HUH!");
     }
 
 }
@@ -176,8 +177,9 @@ window.onresize = () => {
 
 }
 window.onload = () => {
+    console.log("ROOM CODE:", roomCode);
     appendMessage('You have joined');
-    socket.emit('new-user', name);
+    socket.emit('new-user', roomCode, name);
 }
 
 
@@ -217,3 +219,8 @@ socket.on('chat-message', data => {
 socket.on('user-connected', name => {
     appendMessage(`User: ${name} connected`);
 });
+
+// When user disconnects
+socket.on('user-disconnected', message => {
+    appendMessage(message);
+})
