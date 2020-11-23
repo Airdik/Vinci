@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const routes = require('./routes/routes')
 const cookieParser = require('cookie-parser');
+var randomWords = require('random-words');
+
 
 const app = express();
 app.use((req, res, next) => {
@@ -74,7 +76,24 @@ app.get('/room/:roomCode', checkAuth, routes.room)
 app.get('/*', routes.lost);
 
 
-
+//if 2 people are in lobby timer begins
+var timeLeft = 30;
+    //var elem = document.getElementById('some_div');
+    var timerId = setInterval( timer ,1000);
+function timer()
+{
+    
+    if (timeLeft == -1)
+    {
+        clearTimeout(timerId);
+    }
+    else
+    {
+        console.log(timeLeft);
+        //elem.innerHTML = timeLeft + 'seconds remaining';
+        timeLeft--;
+    }
+}
 
 
 

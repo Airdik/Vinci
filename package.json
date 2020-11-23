@@ -24,6 +24,7 @@
     "express-session": "^1.17.1",
     "mongoose": "^5.10.15",
     "pug": "^3.0.0",
+    "random-words": "^1.1.1",
     "socket.io": "^3.0.1"
   }
 }
