@@ -10,12 +10,12 @@ block A
             form(method='POST' action='/room' onsubmit="true")
                 h5(class='inputHeading') Create Room
                 input(id='createCode' type='text' placeholder='Room  #' name='roomCode' autocomplete='off' required)
-                input(type='submit' value='Create')
+                input(id='createBtn' type='submit' value='Create')
 
             
             h5(class='inputHeading') Join Room
             input(id='joinCode' type='text' placeholder='Room  #' name='roomCode' autocomplete='off' required)
-            input(id='join' type='submit' value='Join')
+            input(id='joinBtn' type='submit' value='Join')
             
 
     //- script(defer src="/socket.io/socket.io.js")

@@ -99,3 +99,47 @@ input::-webkit-inner-spin-button {
     color: #F0c330;
     cursor: pointer;
 }
+
+#createBtn {
+    width: 25%;
+    height: 20%;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    padding: 15px;
+    background-color: rgb(248, 153, 10);
+    color: rgb(255, 255, 255);
+    font-weight: 900;
+    font-size: 20px;
+    background-color: rgb(248, 153, 10);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 900;
+    height: 8%;
+}
+
+#createBtn:hover {
+    cursor: pointer;
+    opacity: .7;
+}
+
+#joinBtn {
+    width: 25%;
+    height: 20%;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    padding: 15px;
+    background-color: rgb(248, 153, 10);
+    color: rgb(255, 255, 255);
+    font-weight: 900;
+    font-size: 20px;
+    background-color: rgb(248, 153, 10);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 900;
+    height: 8%;
+}
+
+#joinBtn:hover {
+    cursor: pointer;
+    opacity: .7;
+}

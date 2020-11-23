@@ -10,7 +10,7 @@ const joinCode = document.getElementById('joinCode');
 
 const codePattern = /^d\/{4,}$/g
 
-const join = document.getElementById('join').addEventListener('click', () => {
+const join = document.getElementById('joinBtn').addEventListener('click', () => {
     console.log("Join clicked")
    window.location.href = `/room/${joinCode.value}`
 });
