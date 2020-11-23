@@ -1,10 +1,13 @@
-
 //// USE WHEN CLIENT IS SEPARATE FROM SERVER MACHINE
 // const                   http:server_ip:server_port
 //const socket = io.connect('http://192.168.1.221:6969')
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
 const socket = io.connect('http://localhost:6969')
 
+
+// Drawing variables
+var brushSize = 18;
+var paintColor = 'Black';
 
 // CANVAS
 const canvasHolder = document.getElementById('canvasHolder');
@@ -18,6 +21,43 @@ canvas.width = canvasHolder.clientWidth;
 var painting = false;
 var oldWidth = canvasHolder.clientWidth;
 var oldHeight = canvasHolder.clientHeight;
+var lastPosX = -50;
+var lastPosY = -50;
+
+
+// DRAWING TOOLS STUFF
+document.querySelectorAll('.brush').forEach(item => {
+    item.addEventListener('click', evt => {
+        if (evt.target.id === '1') {
+            brushSize = 12;
+        } else if (evt.target.id === '2') {
+            brushSize = 18;
+        } else {
+            brushSize = 26;
+        }
+    })
+})
+
+document.querySelectorAll('.color').forEach(item => {
+    item.addEventListener('click', evt => {
+        paintColor = evt.target.id;
+    })
+})
+document.getElementById('erase').addEventListener('click', evt => {
+    paintColor = 'White';
+})
+document.getElementById('clear').addEventListener('click', evt => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    socket.emit('clear', roomCode, evt);
+})
+const colorPick = document.getElementById('colorPick');
+colorPick.addEventListener('change', evt => {
+    paintColor = colorPick.value;
+})
+
+
+
+
 
 
 // MESSAGES
@@ -32,26 +72,38 @@ const startPosition = (evt) => {
     draw(evt);
 }
 
-const finishPosition = () => {
+const finishPosition = (evt) => {
+    console.log('EVENT SENT')
+    socket.emit('mouse-up', roomCode, true);
+
     painting = false;
     ctx.beginPath();
 }
 
 const draw = (evt) => {
-    if (!painting) return;
-    ctx.lineWidth = 10;
+
+    if (!painting) {
+
+        return;
+    }
+
+    ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
+    ctx.strokeStyle = paintColor;
 
 
     let pos = getCursorPosition(evt);
-    console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
+    // console.log(`EVT:${evt.clientX}, ${evt.clientY}`);
     console.log(`POS:${pos.x}, ${pos.y}`);
 
     let data = {
         x: pos.x,
-        y: pos.y
+        y: pos.y,
+        color: paintColor,
+        size: brushSize
     }
-    socket.emit('draw', data);
+    socket.emit('draw', roomCode, data);
+
 
     ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
@@ -77,7 +129,7 @@ const appendMessage = (message) => {
     chatBox.append(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-var name = 'Random User';
+
 
 
 const sendMessage = () => {
@@ -85,13 +137,13 @@ const sendMessage = () => {
     console.log("IN HERE");
 
     if (message.trim().length > 0) {
-        socket.emit('chat-message', message);
+        socket.emit('chat-message', roomCode, message);
         appendMessage(`You: ${message}`);
         messageText.value = '';
     } else {
-        appendMessage("WHAT!");
+        appendMessage("HUH!");
     }
-    
+
 }
 
 
@@ -125,9 +177,9 @@ window.onresize = () => {
 
 }
 window.onload = () => {
-    name = prompt('What would you like to go by?');
+    console.log("ROOM CODE:", roomCode);
     appendMessage('You have joined');
-    socket.emit('new-user', name);
+    socket.emit('new-user', roomCode, name);
 }
 
 
@@ -135,15 +187,28 @@ window.onload = () => {
 
 
 ///////// INCOMING SOCKET CODE HERE //////////////////////////////////
+socket.on('mouse-up', (data) => {
+    ctx.beginPath();
+});
 socket.on('draw', data => {
-    ctx.lineWidth = 10;
+    ctx.lineWidth = data.size;
     ctx.lineCap = 'round';
+    ctx.strokeStyle = data.color;
 
     ctx.lineTo(data.x, data.y);
     ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(data.x, data.y);
+
+    //Logging las received x y points from different users
+    lastPosX = data.x;
+    lastPosY = data.y;
 });
+
+socket.on('clear', data => {
+    console.log("clear event received")
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
 
 // When a message is received
 socket.on('chat-message', data => {
@@ -154,3 +219,8 @@ socket.on('chat-message', data => {
 socket.on('user-connected', name => {
     appendMessage(`User: ${name} connected`);
 });
+
+// When user disconnects
+socket.on('user-disconnected', message => {
+    appendMessage(message);
+})

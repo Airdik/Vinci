@@ -44,6 +44,9 @@ block A
                     input(id='vpassword' type="password" placeholder="- - - - - - - -" autocomplete="off")
                     p(id='vpasswordError' class='error') &nbsp;
 
+                div(class='username-exists')
+                    p #{UsernameExists}
+
                 div
                     p(id='submitError' class='error') &nbsp;
                     input(id='submitBtn' type='submit' value='REGISTER')

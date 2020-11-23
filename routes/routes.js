@@ -30,7 +30,7 @@ let User = mongoose.model('User_Collection', userSchema);
 exports.index = (req, res) => {
     let today = new Date();
     let date = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}     ${(today.getHours() + 24) % 12 || 12}:${today.getMinutes()}:${today.getSeconds()}`
-    
+
     let displayDate = '';
     if (req.cookies.lastVisit) {
         displayDate = `Last Visited: ${req.cookies.lastVisit}`;
@@ -43,7 +43,7 @@ exports.index = (req, res) => {
         if (err) return console.error(err);
         console.log(user);
     });
-    // User.collection.remove();
+    //User.collection.remove();
 
     res.cookie('lastVisit', date, { maxAge: 999999999999 });
 
@@ -81,22 +81,38 @@ exports.contact = (req, res) => {
     })
 }
 
-// Check user info against the database
-exports.verifyLogin = (req, res) => {
+var findByUsername = function (username, done) {
+    User.find({ "username": username }, (err, data) => {
+        if (err) return done(err)
+        return done(null, data)
+    })
+};
 
+// Check user info against the database
+exports.verifyLogin = async (req, res) => {
     // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
     // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
-    if (req.body.username == 'user' && req.body.password == 'pass') {
-        // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
-        req.session.user = {
-            isAuthenticated: true,
-            username: req.body.username
-        }
-        //Once logged in redirect to this page
-        res.redirect('/play');
-    } else {
-        // if could not verify then do this
+
+    let user = await User.findOne({ username: req.body.username });
+    if (user == null) {
         res.redirect('/login');
+        console.log(`*Username: "${req.body.username}" not found in database.*`);
+    } else {
+        let validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (validPassword) {
+            // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
+            req.session.user = {
+                isAuthenticated: true,
+                username: user.username
+            }
+            console.log(`User: "${req.body.username}" was authenticated.`);
+            //Once logged in redirect to this page
+            res.redirect('/play');
+        } else {
+            res.redirect('/login');
+            console.log(`*Failed to log in, user "${req.body.username}" entered the wrong password.`);
+        }
+
     }
 }
 
@@ -111,24 +127,38 @@ exports.create = (req, res) => {
 }
 
 // Creating user in the database
-exports.createUser = (req, res) => {
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(req.body.password, salt);
-    let user = new User({
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        username: req.body.username,
-        password: hash,
-        email: req.body.email,
-        wins: 0,
-        losses: 0,
-        total_points: 0
-    });
-    user.save((err, user) => {
-        if (err) return console.error(err);
-        console.log(user.firstName + ' added');
-    });
-    res.redirect('/login');
+exports.createUser = async (req, res) => {
+    let dbUser = await User.findOne({ username: req.body.username });
+ 
+    if (dbUser == null) {
+
+        let salt = bcrypt.genSaltSync(10);
+        let hash = bcrypt.hashSync(req.body.password, salt);
+        let user = new User({
+            firstName: req.body.fname,
+            lastName: req.body.lname,
+            username: req.body.username,
+            password: hash,
+            email: req.body.email,
+            wins: 0,
+            losses: 0,
+            total_points: 0
+        });
+        user.save((err, user) => {
+            if (err) return console.error(err);
+            console.log(user.firstName + ' added');
+        });
+        res.redirect('/login');
+    } else {
+        res.render('create', {
+            title: 'Create Account',
+            icon_href: '/images/create.png',
+            css_href: '/create.css',
+            script_src: 'create.js',
+            UsernameExists: `*Username: "${req.body.username}" already exists. Please choose a new username.*`
+        });
+        console.log(`*Username: "${req.body.username}" already exists.*`);
+    }
 };
 
 // After user creates account add them to database
@@ -153,10 +183,18 @@ exports.play = (req, res) => {
 }
 
 exports.room = (req, res) => {
+
+    if (rooms[req.params.roomCode] == null) {
+        return res.redirect('/play')
+    }
+    let username = req.session.user.username;
+    console.log('Room username', username);
     res.render('room', {
         title: 'Room',
         icon_href: '/images/room.png',
-        css_href: '/room.css'
+        css_href: '/room.css',
+        username,
+        roomCode: req.params.roomCode
     });
 }
 

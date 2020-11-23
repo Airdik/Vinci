@@ -3,35 +3,22 @@ extends layout
 block A
     div(id='bodyDiv' class='body')
         div(id='topTitle')
-            h(id='topTitle') Create, join, or find a room below!
+            h(id='topTitle') Create or join a room below!
         
         div(id='contentDiv' class='contentHolder')
 
-            div(class='flex-container')
-                div(class='title flex-child')
-                    h5(class='inputHeading') Create Room
-                    input(id='createCode' placeholder="Room Code" autocomplete="off" )
-                    p(id='createCodeError' class='error') &nbsp;
+            form(method='POST' action='/room' onsubmit="true")
+                h5(class='inputHeading') Create Room
+                input(id='createCode' type='text' placeholder='Room  #' name='roomCode' autocomplete='off' required)
+                input(type='submit' value='Create')
 
-                div(class='title flex-child')
-                    h5(class='inputHeading') &nbsp;
-                    h2(id='create' class='action') Create!
-
-            div(class='flex-container')
-                div(class='title flex-child')
-                    h5(class='inputHeading') Join Room
-                    input(id='joinCode' placeholder="Room Code" autocomplete="off" )
-                    p(id='joinCodeError' class='error') &nbsp;
-
-                div(class='title flex-child')
-                    h5(class='inputHeading') &nbsp;
-                    h2(id='join' class='action') Join!
+            
+            h5(class='inputHeading') Join Room
+            input(id='joinCode' type='text' placeholder='Room  #' name='roomCode' autocomplete='off' required)
+            input(id='join' type='submit' value='Join')
             
 
-            div(class='title')
-                h5(id='findRoom' class='inputHeading') Find Random room
-
-    script(defer src="/socket.io/socket.io.js")
+    //- script(defer src="/socket.io/socket.io.js")
     script(defer src="/play.js") 
                 
 

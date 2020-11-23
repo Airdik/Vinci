@@ -1,1 +1,57 @@
 extends layout
+
+block accOpt
+    block accOpt
+    li
+        a(href='/login') Log In
+
+block A
+    div(id='contactBodyDiv' class='body')
+        div(id='contactFormTopTitle')
+            h(id='contactTopTitle') Please Write Us A Message Below
+        
+        div(id='contentDiv' class='contactContentHolder')
+
+            form(id='contactform' method='GET' action='/' autocomplete='off' onsubmit= 'return validate(event)')
+                div(class='inputDiv')
+                    h5(class='inputHeadding') First Name
+                    input(id='fname' type='text' placeholder='Enter First Name Here' name='fname' autocomplete='off')
+
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Last Name
+                    input(id='lname' type='text' placeholder='Enter Last Name Here' name='lname' autocomplete='off')
+                
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Email
+                    input(id='email' type='text' autocomplete='nope' name='email' placeholder='Enter Email Address Here' )
+                    
+                div(class='inputDiv')
+                    h5(class='inputHeadding') Message
+                    textarea(id='contactMessage' type="text" name='message' placeholder="Enter Message Here" autocomplete="off")
+
+                div
+                    input(class='btn' id='contactSubmitBtn' type='submit' value='SUBMIT MESSAGE' )
+
+
+//- block A
+//-     div(id='contactBodyDiv' class='body')
+//-         div(id='contactFormTopTitle')
+//-             h(id='contactTopTitle') Contact Information
+        
+//-         div(id='contentDiv' class='contactContentHolder')
+
+//-             form(id='contactform' method='POST' action='/create' autocomplete='off' onsubmit= 'return validate(event)')
+//-                 div(class='contactDiv')
+//-                     h5(class='contactInfo') Vinci Inc
+
+//-                 div(class='contactDiv')
+//-                     h5(class='contactInfo') 143 South Main St
+                
+//-                 div(class='contactDiv')
+//-                     h5(class='contactInfo') Salt Lake City, UT 84111
+                    
+//-                 div(class='contactDiv')
+//-                     h5(class='contactInfo') Email: neumontvinciwebapp@gmail.com
+
+//-                 div(class='contactDiv')
+//-                     h5(class='contactInfo') Phone: 801-995-0551
