@@ -1,8 +1,9 @@
 //// USE WHEN CLIENT IS SEPARATE FROM SERVER MACHINE
 // const                   http:server_ip:server_port
-//const socket = io.connect('http://192.168.1.221:6969')
+// const socket = io.connect('http://192.168.1.221:6969')
+const socket = io.connect('http://71.205.38.64:6969')
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
-const socket = io.connect('http://localhost:6969')
+// const socket = io.connect('http://localhost:6969')
 
 
 // Drawing variables
