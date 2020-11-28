@@ -126,23 +126,6 @@ exports.create = (req, res) => {
     })
 }
 
-//Get Random User
-exports.pickPlayer = async (req, res) => {
-User.find({}, function (err, users){
-    var userMap = {};
-
-    users.forEach(function(user){
-        userMap[user.username] = user;
-    });
-
-    var shuffled = shuffle(userMap);
-    var drawer = shuffled[0];
-
-    console.log(drawer);
-
-    });
-}
-
 
 // Creating user in the database
 exports.createUser = async (req, res) => {
