@@ -7,6 +7,7 @@ const path = require('path');
 const routes = require('./routes/routes')
 const cookieParser = require('cookie-parser');
 var randomWords = require('random-words');
+const { isNullOrUndefined } = require('util');
 
 
 const rooms = {}
@@ -101,24 +102,24 @@ app.get('/room/:roomCode', checkAuth, (req, res) => {
 app.get('/*', routes.lost);
 
 
-//if 2 people are in lobby timer begins
-var timeLeft = 30;
-    //var elem = document.getElementById('some_div');
-    var timerId = setInterval( timer ,1000);
-function timer()
-{
-    
-    if (timeLeft == -1)
-    {
-        clearTimeout(timerId);
-    }
-    else
-    {
-        console.log(timeLeft);
-        //elem.innerHTML = timeLeft + 'seconds remaining';
-        timeLeft--;
-    }
-}
+//// COUNTER
+// var timeLeft = 30;
+//     //var elem = document.getElementById('some_div');
+//     var timerId = setInterval( timer ,1000);
+// function timer()
+// {
+
+//     if (timeLeft == -1)
+//     {
+//         clearTimeout(timerId);
+//     }
+//     else
+//     {
+//         console.log(timeLeft);
+//         //elem.innerHTML = timeLeft + 'seconds remaining';
+//         timeLeft--;
+//     }
+// }
 
 
 
@@ -130,12 +131,25 @@ function timer()
 
 io.on('connection', socket => {
 
-      //All users data
+    //When new user connects
     socket.on('new-user', (roomCode, name) => {
         socket.join(roomCode)
         rooms[roomCode].users[socket.id] = name;
-        socket.to(roomCode).broadcast.emit('user-connected', name);
+        console.log(`People in room:${roomCode} is ${Object.keys(rooms[roomCode].users).length} `)
+
+        let data = (Object.keys(rooms[roomCode].users).length === 1);
+        io.to(socket.id).emit('make-host', data)
+
+        socket.to(roomCode).broadcast.emit('user-connected', name, socket.id);
     });
+
+    //Sends back true/false if they are host or not
+    socket.on('am-i-host', (roomCode) => {
+        console.log("REACHED IN HERE")
+        let data = (Object.keys(rooms[roomCode].users).length === 1);
+        socket.emit('am-i-host', data);
+    });
+
 
     // Drawing data
     socket.on('draw', (roomCode, data) => {
@@ -147,28 +161,51 @@ io.on('connection', socket => {
     })
     socket.on('mouse-up', (roomCode, data) => {
         socket.to(roomCode).broadcast.emit('mouse-up', data);
-    })
+    });
+    socket.on('disable-draw', (roomCode) => {
+        io.to(roomCode).emit('disable-draw');
+    });
+    socket.on('make-drawer', socketID => {
+        io.to(socketID).emit('make-drawer', randomWords({ exactly: 1, maxLength: 10 }));
+    });
+    socket.on('assign-word', (roomCode, word) => {
+        io.to(roomCode).emit('assign-word', word);
+    });
+    socket.on('round-update', (roomCode, message) => {
+        io.to(roomCode).emit('round-update', message);
+    });
+    socket.on('round-reset', (roomCode) => {
+        io.to(roomCode).emit('round-reset');
+    });
+    socket.on('game-end', (roomCode) => {
+        io.to(roomCode).emit('game-end');
+    });
 
-  
-    
+
     // Chat data
     socket.on('chat-message', (roomCode, message) => {
-        socket.to(roomCode).broadcast.emit('chat-message', {message, name: rooms[roomCode].users[socket.id]});
+        socket.to(roomCode).broadcast.emit('chat-message', { message, name: rooms[roomCode].users[socket.id] });
     });
+    socket.on('chat-notification', (roomCode, message) => {
+        io.to(roomCode).emit('chat-notification', message);
+    });
+
+    //Update preGameTime
+    socket.on('update-preGameTime', (roomCode, time)  => {
+        io.to(roomCode).emit('update-preGameTime', time);
+    })
+
+
 
 
 
     //User Disconnect
     socket.on('disconnect', () => {
-        
         getUserRooms(socket).forEach(roomCode => {
-            socket.to(roomCode).broadcast.emit('user-disconnected', `User: ${rooms[roomCode].users[socket.id]} disconnected.`);
+            socket.to(roomCode).broadcast.emit('user-disconnected', `User: ${rooms[roomCode].users[socket.id]} disconnected.`, socket.id);
             delete rooms[roomCode].users[socket.id];
-        })
-        
-    })
-
-
+        });
+    });
 
 });
 
@@ -179,6 +216,7 @@ function getUserRooms(socket) {
         return names
     }, [])
 }
+
 
 
 
