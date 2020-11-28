@@ -31,6 +31,28 @@ var listOfPlayers = [];
 
 
 
+// Timer for gameplay
+var timeLeft = 60;
+var elem = document.getElementById('time');
+var timerId = setInterval(countdown, 1000);
+
+function countdown() {
+    if (timeLeft == -1) {
+        clearTimeout(timerId);
+        elem.innerHTML = `Time's Up!`;
+        endTurn();
+    } else {
+        elem.innerHTML = timeLeft + ' seconds remaining';
+        timeLeft--;
+    }
+}
+
+// TODO turn logic here:
+function endTurn() {
+    alert("Time's Up!");
+}
+
+
 // Drawing variables
 var brushSize = 18;
 var paintColor = 'Black';
