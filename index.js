@@ -102,30 +102,6 @@ app.get('/room/:roomCode', checkAuth, (req, res) => {
 app.get('/*', routes.lost);
 
 
-//// COUNTER
-// var timeLeft = 30;
-//     //var elem = document.getElementById('some_div');
-//     var timerId = setInterval( timer ,1000);
-// function timer()
-// {
-
-//     if (timeLeft == -1)
-//     {
-//         clearTimeout(timerId);
-//     }
-//     else
-//     {
-//         console.log(timeLeft);
-//         //elem.innerHTML = timeLeft + 'seconds remaining';
-//         timeLeft--;
-//     }
-// }
-
-
-
-
-
-
 /////////////////// SOCKET CODE HERE //////////////////////////////////////////
 
 
