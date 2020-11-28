@@ -15,8 +15,8 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 5;
-const drawingTime = 10;
+const preGameTime = 30;
+const drawingTime = 60;
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -28,7 +28,6 @@ var round = 1;
 var myScore = 0;
 var currentPlayerIndex = 0;
 var listOfPlayers = [];
-
 
 // Drawing variables
 var brushSize = 18;
@@ -95,7 +94,7 @@ const finishPosition = (evt) => {
 }
 const draw = (evt) => {
 
-    if (!painting) {
+    if (!painting || !isDrawer) {
 
         return;
     }
@@ -133,7 +132,7 @@ const getCursorPosition = (evt) => {
 
 const appendMessage = (message) => {
     const messageElement = document.createElement('div');
-    messageElement.innerHTML = message;
+    messageElement.prepend(`${message}`);
     messageElement.style.padding = "4px";
     chatBox.append(messageElement);
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -142,12 +141,12 @@ const appendMessage = (message) => {
 
 
 const sendMessage = () => {
-    let message = messageText.value;
+    let message = `${messageText.value}`;
 
     if (!isDrawer) {
 
         if (message.trim().length > 0) {
-            if (message.trim().toLowerCase().includes(wordToDraw)) {
+            if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
                     myScore += 50;
                     scoreHolder.innerHTML = `Score: ${myScore}`
@@ -220,7 +219,9 @@ function advanceRound() {
             startGame();
         } else {
             console.log('GAME ENDED!')
-            socket.emit('game-end', roomCode) // possibly send final scores or all players here.
+            socket.emit('save-score', roomCode);
+            socket.emit('game-end', roomCode) 
+            startPreGameTimer();
         }
 
     } else {
@@ -394,8 +395,18 @@ socket.on('round-reset', () => {
 
 // When game is over
 socket.on('game-end', () => {
+    hasGuessedCorrectly = false;
+    isDrawer = false;
+    wordToDraw = '';
+    wordToDrawLength = -1;
+    myScore = 0;
+    round = 1;
+    currentPlayerIndex = 0;
     timeHolder.innerHTML = 'Game Over!';
 })
+socket.on('save-score', () => {
+    socket.emit('db-update', name, myScore);
+});
 
 // When user disconnects
 socket.on('user-disconnected', (message, socketID) => {
