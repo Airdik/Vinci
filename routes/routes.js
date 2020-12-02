@@ -20,8 +20,7 @@ let userSchema = mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    wins: Number,
-    losses: Number,
+    games_played: Number,
     total_points: Number
 });
 
@@ -141,8 +140,7 @@ exports.createUser = async (req, res) => {
             username: req.body.username,
             password: hash,
             email: req.body.email,
-            wins: 0,
-            losses: 0,
+            games_played: 0,
             total_points: 0
         });
         user.save((err, user) => {
