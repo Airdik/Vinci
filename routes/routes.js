@@ -160,18 +160,6 @@ exports.createUser = async (req, res) => {
     }
 };
 
-// After user creates account add them to database
-exports.verifyCreate = (req, res) => {
-    res.send('IMPLEMENT ADDING PERSON TO DATABASE')
-}
-
-
-
-
-
-exports.private = (req, res) => {
-    res.send('YOU ARE LOGGED IN!')
-}
 
 exports.play = (req, res) => {
     res.render('play', {

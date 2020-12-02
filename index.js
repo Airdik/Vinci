@@ -68,7 +68,6 @@ app.get('/logout', (req, res) => {
 });
 
 // PRIVATE PAGES - Needs authentication - May include the lobby page, the actual play page etc.
-app.get('/private', checkAuth, routes.private);
 app.get('/play', checkAuth, routes.play);
 
 app.post('/room', urlencodedParser, (req, res) => {
