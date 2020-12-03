@@ -161,11 +161,7 @@ io.on('connection', socket => {
     socket.on('db-update', (username, score) => {
         //UPDATE PLAYERS STUFF IN THE DATABASE here
         // Find by username then increase their games played by 1, and add the score to their previous score
-        // Since the db stuff is in routs.js you might just have to make a function in routs like 
-        //exports.updateUser = (username, score) => {
-            // and in here you would do the updating for the user that is passed in from the parameters.
-        //}
-
+        app.post('/update', urlencodedParser, routes.updateUser);
     });
 
 

@@ -185,15 +185,19 @@ exports.room = (req, res) => {
     });
 }
 
-
-
-
-
-
-
-
-
-
+exports.updateUser = (username, score) => {
+    let user = User.findOne({ username: req.session.user.username });
+    user.username = req.body.name;
+    user.score = req.body.score;
+    user.games_played = req.body.games_played;
+    user.save();
+    // User.updateOne({username: req.session.user.username}, {
+    //     username: req.body.name,
+    //     userr.score = req.body.score;
+    //     userr.games_played = req.body.games_played;
+    // });
+    res.redirect('/play')
+}
 
 
 
