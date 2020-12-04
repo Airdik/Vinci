@@ -163,7 +163,7 @@ io.on('connection', socket => {
         // Find by username then increase their games played by 1, and add the score to their previous score
         // Since the db stuff is in routs.js you might just have to make a function in routs like 
         //exports.updateUser = (username, score) => {
-            // and in here you would do the updating for the user that is passed in from the parameters.
+        // and in here you would do the updating for the user that is passed in from the parameters.
         //}
 
     });
@@ -178,8 +178,13 @@ io.on('connection', socket => {
     });
 
     //Update preGameTime
-    socket.on('update-preGameTime', (roomCode, time)  => {
+    socket.on('update-preGameTime', (roomCode, time) => {
         io.to(roomCode).emit('update-preGameTime', time);
+    })
+
+    //Updating time for non host PLAYERS
+    socket.on('update-time', (roomCode, time) => {
+        io.to(roomCode).emit('update-time', time);
     })
 
 
