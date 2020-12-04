@@ -174,8 +174,13 @@ io.on('connection', socket => {
     });
 
     //Update preGameTime
-    socket.on('update-preGameTime', (roomCode, time)  => {
+    socket.on('update-preGameTime', (roomCode, time) => {
         io.to(roomCode).emit('update-preGameTime', time);
+    })
+
+    //Updating time for non host PLAYERS
+    socket.on('update-time', (roomCode, time) => {
+        io.to(roomCode).emit('update-time', time);
     })
 
 
