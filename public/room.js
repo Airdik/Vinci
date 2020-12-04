@@ -7,7 +7,7 @@ const socket = io.connect('http://localhost:6969')
 // Getting required elements
 const timeHolder = document.getElementById('time');
 const wordHolder = document.getElementById('word');
-const scoreHolder = document.getElementById('score')
+const scoreHolder = document.getElementById('score');
 const roundHolder = document.getElementById('round');
 const chatBox = document.getElementById('chatBox');
 const messageText = document.getElementById('messageText');
@@ -15,9 +15,9 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 30;
-const drawingTime = 60;
-const numOfRounds = 3;
+const preGameTime = 10;
+const drawingTime = 10;
+const numOfRounds = 1;
 var isHost = false;
 var isDrawer = true;
 var hasGuessedCorrectly = false;

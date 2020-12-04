@@ -185,18 +185,44 @@ exports.room = (req, res) => {
     });
 }
 
-exports.updateUser = (username, score) => {
-    let user = User.findOne({ username: req.session.user.username });
-    user.username = req.body.name;
-    user.score = req.body.score;
-    user.games_played = req.body.games_played;
-    user.save();
-    // User.updateOne({username: req.session.user.username}, {
-    //     username: req.body.name,
-    //     userr.score = req.body.score;
-    //     userr.games_played = req.body.games_played;
-    // });
-    res.redirect('/play')
+exports.updateUser = (usernamex, score) => {
+    // let user = User.findOne({ username });
+    // let tempScore = score
+    // user.score = tempScore + score;
+    // user.games_played = user.games_played + 1;
+    // user.save();
+
+    // let conditions = { username: usernamex },
+    // update = { $inc: { games_played: 1 }}, { $inc: { total_points: score }}
+
+    User.findOneAndUpdate({ "username": usernamex}, { "$inc": { "games_played": 1, "total_points":score}}).exec(function(err, user){
+        if(err) {
+            console.log(err);
+     
+        } else {
+                  console.log('Worked...?');
+        }
+     });
+
+    // var conditions1 = { username: usernamex } 
+    // , updateOne = { $inc: { games_played: 1 }}
+    // var conditions2 = { username: usernamex }
+    // , updateOne = { $inc: { total_points: score }}
+
+    // User.updateMany(conditions1, updateOne, { multi: true }).then(updatedRows=>{
+    // }).catch(err=>{
+    //     console.log(err)
+        
+    // })
+    // User.updateMany(conditions2, updateOne, { multi: true }).then(updatedRows=>{
+        
+    // }).catch(err=>{
+    // console.log(err)
+    
+    // })
+    // console.log("THE USERS SCORE IN DB", user.score)
+    console.log(usernamex)
+    console.log(score)
 }
 
 

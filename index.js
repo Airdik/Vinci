@@ -160,8 +160,8 @@ io.on('connection', socket => {
     });
     socket.on('db-update', (username, score) => {
         //UPDATE PLAYERS STUFF IN THE DATABASE here
+        routes.updateUser(username, score)
         // Find by username then increase their games played by 1, and add the score to their previous score
-        app.post('/update', urlencodedParser, routes.updateUser);
     });
 
 
