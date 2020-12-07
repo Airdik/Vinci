@@ -15,13 +15,8 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-<<<<<<< HEAD
-const preGameTime = 10;
-const drawingTime = 60;
-=======
 const preGameTime = 20;
 const drawingTime = 30;
->>>>>>> a5c3895fbceabe8b066fc49b26fc8c3604b253f3
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -151,18 +146,20 @@ const sendMessage = () => {
     var test = timeHolder.textContent;
     var scorearray = test.split(":");
     var score = parseInt(scorearray[1]);
+    var tries = 0;
 
     
      if (!isDrawer) {
         if (message.trim().length > 0) {
             if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
-                    myScore += score       
+                    myScore += score  / tries     
                     scoreHolder.innerHTML = `Score: ${myScore}`
                     socket.emit('chat-notification', roomCode, `*${name} guessed correctly!*`)
                     hasGuessedCorrectly = true;
                 } else {
                     appendMessage(`You: ${message} (Not Sent)`)
+                    tries++;
                 }
 
             } else {
