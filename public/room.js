@@ -7,7 +7,7 @@ const socket = io.connect('http://localhost:6969')
 // Getting required elements
 const timeHolder = document.getElementById('time');
 const wordHolder = document.getElementById('word');
-const scoreHolder = document.getElementById('score')
+const scoreHolder = document.getElementById('score');
 const roundHolder = document.getElementById('round');
 const chatBox = document.getElementById('chatBox');
 const messageText = document.getElementById('messageText');
@@ -15,8 +15,13 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
+<<<<<<< HEAD
 const preGameTime = 10;
 const drawingTime = 60;
+=======
+const preGameTime = 20;
+const drawingTime = 30;
+>>>>>>> a5c3895fbceabe8b066fc49b26fc8c3604b253f3
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -225,7 +230,7 @@ function advanceRound() {
         } else {
             console.log('GAME ENDED!')
             socket.emit('save-score', roomCode);
-            socket.emit('game-end', roomCode) 
+            socket.emit('game-end', roomCode)
             startPreGameTimer();
         }
 
@@ -248,21 +253,28 @@ function updateWordHolder(word) {
 }
 
 function updateTimeHolder() {
-    let timeLeft = drawingTime;
 
-    let timerId = setInterval(drawTimer, 1000);
+    if (isHost) {
+        let timeLeft = drawingTime;
 
-    function drawTimer() {
-        if (timeLeft < 0) {
-            clearTimeout(timerId);
-            if (isHost) {
-                advanceRound();
+        let timerId = setInterval(drawTimer, 1000);
+
+        function drawTimer() {
+            if (timeLeft < 0) {
+                clearTimeout(timerId);
+                if (isHost) {
+                    advanceRound();
+                }
+
+            } else {
+                timeHolder.innerHTML = `Round Time Remaining: ${timeLeft}`
+                socket.emit('update-time', roomCode, timeLeft);
+                timeLeft--;
             }
 
-        } else {
-            timeHolder.innerHTML = `Round Time Remaining: ${timeLeft}`
-            timeLeft--;
         }
+
+
 
     }
 
@@ -386,6 +398,13 @@ socket.on('assign-word', word => {
     updateWordHolder(word);
     updateTimeHolder();
 });
+
+socket.on('update-time', time => {
+    console.log('UPDATE-TIME received')
+    if (!isHost) {
+        timeHolder.innerHTML = `Round Time Remaining: ${time}`
+    }
+})
 
 socket.on('round-update', (message) => {
     roundHolder.innerHTML = `${message}`
