@@ -142,18 +142,25 @@ const appendMessage = (message) => {
 
 const sendMessage = () => {
     let message = `${messageText.value}`;
+    
+    var test = timeHolder.textContent;
+    var scorearray = test.split(":");
+    var score = parseInt(scorearray[1]);
+    var tries = 0;
 
-    if (!isDrawer) {
-
+    
+     if (!isDrawer) {
         if (message.trim().length > 0) {
             if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
-                    myScore += 50;
+                    tries++;
+                    myScore += score  / tries     
                     scoreHolder.innerHTML = `Score: ${myScore}`
                     socket.emit('chat-notification', roomCode, `*${name} guessed correctly!*`)
                     hasGuessedCorrectly = true;
                 } else {
                     appendMessage(`You: ${message} (Not Sent)`)
+                    tries++;
                 }
 
             } else {
@@ -168,6 +175,7 @@ const sendMessage = () => {
         appendMessage('Cannot message while drawing.')
     }
     messageText.value = '';
+    
 
 
 }
@@ -238,6 +246,7 @@ function updateWordHolder(word) {
     } else {
         let blank = '__ ';
         wordHolder.innerHTML = blank.repeat((word.length - 1)) + '__'
+
     }
 }
 
