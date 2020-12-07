@@ -153,6 +153,7 @@ const sendMessage = () => {
         if (message.trim().length > 0) {
             if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
+                    tries++;
                     myScore += score  / tries     
                     scoreHolder.innerHTML = `Score: ${myScore}`
                     socket.emit('chat-notification', roomCode, `*${name} guessed correctly!*`)
