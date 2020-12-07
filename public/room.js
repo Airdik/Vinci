@@ -15,7 +15,7 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 30;
+const preGameTime = 10;
 const drawingTime = 60;
 const numOfRounds = 3;
 var isHost = false;
@@ -142,13 +142,17 @@ const appendMessage = (message) => {
 
 const sendMessage = () => {
     let message = `${messageText.value}`;
+    
+    var test = timeHolder.textContent;
+    var scorearray = test.split(":");
+    var score = parseInt(scorearray[1]);
 
-    if (!isDrawer) {
-
+    
+     if (!isDrawer) {
         if (message.trim().length > 0) {
             if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
-                    myScore += 50;
+                    myScore += score       
                     scoreHolder.innerHTML = `Score: ${myScore}`
                     socket.emit('chat-notification', roomCode, `*${name} guessed correctly!*`)
                     hasGuessedCorrectly = true;
@@ -168,6 +172,7 @@ const sendMessage = () => {
         appendMessage('Cannot message while drawing.')
     }
     messageText.value = '';
+    
 
 
 }
@@ -238,6 +243,7 @@ function updateWordHolder(word) {
     } else {
         let blank = '__ ';
         wordHolder.innerHTML = blank.repeat((word.length - 1)) + '__'
+
     }
 }
 
