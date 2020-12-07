@@ -15,8 +15,8 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 20;
-const drawingTime = 30;
+const preGameTime = 30;
+const drawingTime = 60;
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -293,6 +293,15 @@ window.onresize = () => {
     oldWidth = canvasHolder.clientWidth;
     oldHeight = canvasHolder.clientHeight;
 
+    console.log("window was resized");
+    console.log("window.innerWidth is:", window.innerWidth);
+
+    if (window.innerWidth < 1400) {
+        alert("Yo make your window full screen!");
+        console.log("Warned user about screen");
+    }
+    
+
 }
 window.onload = () => {
     console.log("ROOM CODE:", roomCode);
@@ -417,6 +426,8 @@ socket.on('game-end', () => {
     round = 1;
     currentPlayerIndex = 0;
     timeHolder.innerHTML = 'Game Over!';
+    roundHolder.innerHTML = 'Round 1 of 3';
+    scoreHolder.innerHTML = 'Score: 0';
 })
 socket.on('save-score', () => {
     socket.emit('db-update', name, myScore);
