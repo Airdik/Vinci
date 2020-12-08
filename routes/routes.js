@@ -89,9 +89,6 @@ var findByUsername = function (username, done) {
 
 // Check user info against the database
 exports.verifyLogin = async (req, res) => {
-    // ******* THIS IS WHERE WE SHOULD CHECK AGAINST THE DATABASE TO CHECK IF THE USER EXISTS AND THE PASSWORD MATCHES *******
-    // instead of req.body.user === 'user' &&...     it would be some thing like req.body.user exists in the database && the password matches that is in the database
-
     let user = await User.findOne({ username: req.body.username });
     if (user == null) {
         res.redirect('/login');
@@ -99,7 +96,7 @@ exports.verifyLogin = async (req, res) => {
     } else {
         let validPassword = await bcrypt.compare(req.body.password, user.password);
         if (validPassword) {
-            // once user and pass are verified then we create a session with any key:value pair we want, which we can check for later
+            // Creating a session for the user
             req.session.user = {
                 isAuthenticated: true,
                 username: user.username
@@ -108,10 +105,10 @@ exports.verifyLogin = async (req, res) => {
             //Once logged in redirect to this page
             res.redirect('/play');
         } else {
+            // If the password is incorrect
             res.redirect('/login');
             console.log(`*Failed to log in, user "${req.body.username}" entered the wrong password.`);
         }
-
     }
 }
 

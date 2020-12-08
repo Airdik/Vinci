@@ -14,10 +14,10 @@ const rooms = {}
 
 const app = express();
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-})
+});
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -172,6 +172,11 @@ io.on('connection', socket => {
     socket.on('chat-notification', (roomCode, message) => {
         io.to(roomCode).emit('chat-notification', message);
     });
+
+    // Tells each client to send their score
+    socket.on('tell-score', (roomCode) => {
+        io.to(roomCode).emit('tell-score');
+    })
 
     //Update preGameTime
     socket.on('update-preGameTime', (roomCode, time) => {

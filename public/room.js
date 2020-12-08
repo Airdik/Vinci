@@ -1,8 +1,8 @@
 //// USE WHEN CLIENT IS SEPARATE FROM SERVER MACHINE
 // const                   http:server_ip:server_port
-// const socket = io.connect('http://71.205.38.64:6969')
+// const socket = io.connect('http://71.205.38.64:6969');
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
-const socket = io.connect('http://localhost:6969')
+const socket = io.connect('http://localhost:6969');
 
 // Getting required elements
 const timeHolder = document.getElementById('time');
@@ -15,8 +15,8 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 30;
-const drawingTime = 60;
+const preGameTime = 10;
+const drawingTime = 10;
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -148,8 +148,7 @@ const sendMessage = () => {
     var score = parseInt(scorearray[1]);
     var tries = 0;
 
-    
-     if (!isDrawer) {
+    if (!isDrawer) {
         if (message.trim().length > 0) {
             if (message.trim().toLowerCase().includes(wordToDraw) && !(wordToDraw === '')) {
                 if (!hasGuessedCorrectly) {
@@ -175,9 +174,6 @@ const sendMessage = () => {
         appendMessage('Cannot message while drawing.')
     }
     messageText.value = '';
-    
-
-
 }
 
 // Timer before actual game starts, activated when at least 2 people are in the lobby
@@ -217,6 +213,7 @@ function startGame() {
     currentPlayerIndex++;
 }
 function advanceRound() {
+    socket.emit('chat-notification', roomCode, `*The Word Was "${wordToDraw}"*`);
     socket.emit('round-reset', roomCode);
     if (currentPlayerIndex == (listOfPlayers.length)) {
 
@@ -227,8 +224,10 @@ function advanceRound() {
             startGame();
         } else {
             console.log('GAME ENDED!')
+            socket.emit('tell-score', roomCode);
             socket.emit('save-score', roomCode);
             socket.emit('game-end', roomCode)
+ 
             startPreGameTimer();
         }
 
@@ -245,8 +244,7 @@ function updateWordHolder(word) {
         wordHolder.innerHTML = `${word}`
     } else {
         let blank = '__ ';
-        wordHolder.innerHTML = blank.repeat((word.length - 1)) + '__'
-
+        wordHolder.innerHTML = blank.repeat((word.length - 1)) + '__';
     }
 }
 
@@ -269,13 +267,8 @@ function updateTimeHolder() {
                 socket.emit('update-time', roomCode, timeLeft);
                 timeLeft--;
             }
-
         }
-
-
-
     }
-
 }
 
 
@@ -411,7 +404,12 @@ socket.on('update-time', time => {
     if (!isHost) {
         timeHolder.innerHTML = `Round Time Remaining: ${time}`
     }
-})
+});
+
+socket.on('tell-score', () => {
+    let msg = `*${name} scored ${myScore} points*`;
+    socket.emit('chat-notification', roomCode, msg);
+});
 
 socket.on('round-update', (message) => {
     roundHolder.innerHTML = `${message}`
@@ -422,7 +420,6 @@ socket.on('round-reset', () => {
     wordToDraw = '';
     wordToDrawLength = -1;
 });
-
 
 
 // When game is over
