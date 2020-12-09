@@ -14,7 +14,7 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 60;
+const preGameTime = 30;
 const drawingTime = 30;
 const numOfRounds = 3;
 var isHost = false;
