@@ -13,13 +13,14 @@ const { isNullOrUndefined } = require('util');
 const rooms = {}
 
 const app = express();
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 
 
 // Things the app is using
@@ -185,7 +186,7 @@ io.on('connection', socket => {
 
     //Updating time for non host PLAYERS
     socket.on('update-time', (roomCode, time) => {
-        io.to(roomCode).emit('update-time', time);
+        socket.to(roomCode).broadcast.emit('update-time', time);
     })
 
 

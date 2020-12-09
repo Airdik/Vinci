@@ -1,6 +1,5 @@
 //// USE WHEN CLIENT IS SEPARATE FROM SERVER MACHINE
 // const                   http:server_ip:server_port
-// const socket = io.connect('http://71.205.38.64:6969');
 //// USE WHEN RUNNING CLIENT AND SERVER ON SAME MACHINE
 const socket = io.connect('http://localhost:6969');
 
@@ -15,8 +14,8 @@ const sendBtn = document.getElementById('sendBtn');
 
 
 // ALL game control variables for host.
-const preGameTime = 10;
-const drawingTime = 10;
+const preGameTime = 60;
+const drawingTime = 30;
 const numOfRounds = 3;
 var isHost = false;
 var isDrawer = true;
@@ -264,8 +263,12 @@ function updateTimeHolder() {
 
             } else {
                 timeHolder.innerHTML = `Round Time Remaining: ${timeLeft}`
-                socket.emit('update-time', roomCode, timeLeft);
-                timeLeft--;
+                if (isHost) {
+                    socket.emit('update-time', roomCode, timeLeft);
+                    timeLeft--; 
+                }
+                
+                
             }
         }
     }
@@ -368,8 +371,12 @@ socket.on('user-connected', (name, socketID) => {
     if (isHost) {
         console.log(`PLAYERS IN LOBBY: ${listOfPlayers}`)
         if (listOfPlayers.length > 1) {
-            console.log(`# OF PLAYERS IN LOBBY: ${listOfPlayers.length}`)
-            startPreGameTimer();
+            console.log(`# OF PLAYERS IN LOBBY: ${listOfPlayers.length}`);
+
+            if (listOfPlayers.length < 3) {
+                startPreGameTimer();
+            }
+            
         }
     }
 });
