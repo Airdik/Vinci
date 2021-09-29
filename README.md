@@ -1,2 +1,2 @@
 # Vinci
-Vinci is a online multiplayer pictionary drawing game.
+Vinci is an online multiplayer pictionary drawing game.
